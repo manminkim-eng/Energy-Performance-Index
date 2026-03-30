@@ -30,6 +30,8 @@
   --orange:#f97316;--purple:#a78bfa;
   --text:#e8f0fe;--text2:#8fa8d4;--text3:#4e6a96;
   --header-h:62px;
+  /* 모바일 하단 점수바 높이 */
+  --score-bar-h:74px;
 }
 body{background:var(--bg);color:var(--text);min-height:100vh;}
 ::-webkit-scrollbar{width:5px;height:5px;}
@@ -459,19 +461,153 @@ input[type="number"]{-moz-appearance:textfield;}
 #print-layer{display:none;}
 
 /* ══ RESPONSIVE ══ */
+
+/* ── 태블릿(821~1100px): 2컬럼 유지, sticky 강화 ── */
+@media(max-width:1100px){
+  .main-wrap{grid-template-columns:270px 1fr;padding:14px;gap:14px;}
+}
+
+/* ── 모바일+태블릿 공통(≤820px): 점수패널 → 하단 고정 바 ── */
+@media(max-width:820px){
+
+  /* 그리드 단일 컬럼 */
+  .main-wrap{
+    grid-template-columns:1fr;
+    padding:12px 12px calc(var(--score-bar-h) + 12px + env(safe-area-inset-bottom,0px));
+    gap:12px;
+  }
+
+  /* 점수 패널 카드 → 하단 fixed 바로 전환 */
+  .score-panel{
+    position:fixed;
+    bottom:0;left:0;right:0;top:auto;
+    z-index:35;
+    /* sticky 해제 */
+    display:block;
+  }
+  .score-panel .card{
+    border-radius:18px 18px 0 0;
+    border-bottom:none;
+    box-shadow:0 -4px 24px rgba(0,0,0,.45);
+    /* 확장/축소 전환 */
+    transition:max-height .35s cubic-bezier(.4,0,.2,1);
+    max-height:var(--score-bar-h);
+    overflow:hidden;
+  }
+  .score-panel .card.expanded{
+    max-height:92vh;
+    overflow-y:auto;
+  }
+
+  /* ── 모바일 컴팩트 점수 바 (항상 보임) ── */
+  .score-bar-compact{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));
+    cursor:pointer;
+    flex-shrink:0;
+    background:var(--surface);
+    position:relative;
+    z-index:1;
+    min-height:var(--score-bar-h);
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .score-bar-compact::before{
+    content:'';
+    position:absolute;top:8px;left:50%;transform:translateX(-50%);
+    width:36px;height:4px;border-radius:2px;
+    background:var(--border2);
+  }
+  /* 링 미니 */
+  .score-mini-ring{
+    position:relative;width:48px;height:48px;flex-shrink:0;
+  }
+  .score-mini-ring svg{width:100%;height:100%;transform:rotate(-90deg);}
+  .score-mini-center{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+  }
+  .score-mini-num{
+    font-size:15px;font-weight:900;
+    font-family:'JetBrains Mono',monospace;
+    line-height:1;
+  }
+  .score-mini-lbl{font-size:7px;font-weight:700;color:var(--text3);margin-top:1px;}
+  /* 컴팩트 텍스트 */
+  .score-bar-info{flex:1;min-width:0;}
+  .score-bar-verdict{font-size:12px;font-weight:800;margin-bottom:2px;}
+  .score-bar-target{font-size:10px;color:var(--text2);}
+  /* 분야별 미니 바 */
+  .score-bar-cats{display:flex;gap:4px;margin-top:4px;}
+  .score-cat-pill{
+    display:flex;align-items:center;gap:3px;
+    padding:2px 6px;border-radius:4px;
+    font-size:9px;font-weight:800;
+    font-family:'JetBrains Mono',monospace;
+    background:rgba(255,255,255,.05);border:1px solid var(--border);
+    white-space:nowrap;
+  }
+  /* 토글 아이콘 */
+  .score-bar-toggle{
+    width:28px;height:28px;border-radius:8px;
+    background:rgba(255,255,255,.05);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;transition:transform .3s;
+  }
+  .score-bar-toggle svg{width:14px;height:14px;stroke:var(--text2);fill:none;stroke-width:2.5;}
+  .score-panel .card.expanded .score-bar-toggle{transform:rotate(180deg);}
+
+  /* 확장 시 내부 스크롤 패딩 */
+  .score-panel .card.expanded .score-ring-wrap,
+  .score-panel .card.expanded .score-breakdown,
+  .score-panel .card.expanded .mandatory-panel,
+  .score-panel .card.expanded .proj-info-wrap,
+  .score-panel .card.expanded .progress-info{
+    display:block;
+  }
+
+  /* 기본(축소) 상태에서 내부 상세 숨김 */
+  .score-panel .card:not(.expanded) .score-ring-wrap,
+  .score-panel .card:not(.expanded) .score-breakdown,
+  .score-panel .card:not(.expanded) .mandatory-panel,
+  .score-panel .card:not(.expanded) .proj-info-wrap,
+  .score-panel .card:not(.expanded) .progress-info,
+  .score-panel .card:not(.expanded) .card-head{
+    display:none;
+  }
+
+  /* 컴팩트 바는 항상 표시 */
+  .score-bar-compact{display:flex;}
+
+  /* 기본값: score-bar-compact만 데스크탑에서 숨김 */
+}
+
+/* ── 데스크탑(>820px): 컴팩트 바 숨김 ── */
+@media(min-width:821px){
+  .score-bar-compact{display:none;}
+  :root{--score-bar-h:0px;}
+}
+
+/* ── 모바일 전용 추가 조정 ── */
 @media(max-width:600px){
-  .brand-title{font-size:13px;}.brand-sub{display:none;}
+  .brand-title{font-size:12px;}
+  .brand-sub{display:none;}
   .btn-ulink .ul-txt{display:none;}
   .config-row,.config-row-3{grid-template-columns:1fr;}
-  .stab{padding:5px 9px;font-size:10px;}
+  .stab{padding:5px 8px;font-size:10px;}
   .a4-sheet{width:100%;padding:10mm 7mm;}
   .a4-info-grid,.a4-sc-bars,.a4-mand-grid{grid-template-columns:1fr;}
   .a4-score-box{grid-template-columns:1fr;gap:8pt;}
+  .main-wrap{padding:10px 10px calc(var(--score-bar-h) + 10px + env(safe-area-inset-bottom,0px));}
 }
 @media(max-width:400px){
   .pv-toolbar{flex-direction:column;gap:8px;}
   .pv-toolbar-btns{width:100%;display:flex;gap:6px;}
   .pv-btn-print,.pv-btn-close{flex:1;justify-content:center;}
+  .score-bar-cats{display:none;}
 }
 </style>
 </head>
@@ -521,9 +657,37 @@ input[type="number"]{-moz-appearance:textfield;}
 <!-- ═══ MAIN ═══ -->
 <div class="main-wrap">
 
-  <!-- 좌: 점수 패널 -->
+  <!-- 좌: 점수 패널 (데스크탑: sticky 컬럼 / 모바일: fixed 하단 바) -->
   <div class="score-panel">
-    <div class="card">
+    <div class="card" id="scorePanelCard">
+
+      <!-- ★ 모바일 전용 컴팩트 바 (항상 보임) -->
+      <div class="score-bar-compact" onclick="toggleScorePanel()" id="scoreBarCompact">
+        <!-- 미니 링 -->
+        <div class="score-mini-ring">
+          <svg viewBox="0 0 48 48">
+            <circle cx="24" cy="24" r="20" fill="none" stroke="var(--border)" stroke-width="4"/>
+            <circle id="miniRingFill" cx="24" cy="24" r="20" fill="none" stroke-width="4"
+              stroke-linecap="round" stroke-dasharray="0 125.7" stroke-dashoffset="0"/>
+          </svg>
+          <div class="score-mini-center">
+            <div class="score-mini-num" id="miniScore">0</div>
+            <div class="score-mini-lbl">점</div>
+          </div>
+        </div>
+        <!-- 텍스트 영역 -->
+        <div class="score-bar-info">
+          <div class="score-bar-verdict" id="compactVerdict">항목을 선택하세요</div>
+          <div class="score-bar-target" id="compactTarget">목표: — 점</div>
+          <div class="score-bar-cats" id="compactCats"></div>
+        </div>
+        <!-- 토글 버튼 -->
+        <div class="score-bar-toggle">
+          <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+        </div>
+      </div>
+
+      <!-- 데스크탑 카드 헤더 -->
       <div class="card-head">
         <div class="card-icon" style="background:rgba(16,185,129,.15);color:var(--accent3);">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -1021,6 +1185,9 @@ function updateScore(){
   document.getElementById('progressFill').style.width=(cnt/tot*100)+'%';
   document.getElementById('progressText').textContent=`${cnt} / ${tot}개 항목 적용`;
 
+  /* ── 모바일 컴팩트 바 업데이트 ── */
+  updateCompactBar(total, targetScore, sc, pass, rc);
+
   /* 의무항목 패널 */
   const mandItems=getMandatoryStatus();
   const ml=document.getElementById('mandatoryList');
@@ -1217,6 +1384,71 @@ function resetAll(){
   Object.keys(state.checked).forEach(k=>state.checked[k]=false);
   document.querySelectorAll('.epi-item').forEach(el=>el.classList.remove('checked'));
   updateScore();
+}
+
+/* ════════════════════════════════
+   모바일 컴팩트 스코어 바 로직
+════════════════════════════════ */
+const CAT_COLORS={insul:'#10b981',mech:'#3b82f6',elec:'#f59e0b',renew:'#a78bfa'};
+const CAT_SHORT={insul:'단열',mech:'기계',elec:'전기',renew:'신재생'};
+
+function updateCompactBar(total, targetScore, sc, pass, rc){
+  /* 미니 링 */
+  const miniCirc=2*Math.PI*20; // r=20 → 125.66
+  const miniFill=(total/100)*miniCirc;
+  const mr=document.getElementById('miniRingFill');
+  if(mr){
+    mr.setAttribute('stroke-dasharray',`${miniFill} ${miniCirc}`);
+    mr.setAttribute('stroke',rc);
+  }
+  const ms=document.getElementById('miniScore');
+  if(ms){ms.textContent=total;ms.style.color=rc;}
+
+  /* 판정 텍스트 */
+  const cv=document.getElementById('compactVerdict');
+  if(cv){
+    if(total===0){cv.textContent='항목을 선택하세요';cv.style.color='var(--text3)';}
+    else if(pass){cv.textContent=`✓ 목표 달성 (${targetScore}점↑)`;cv.style.color='var(--accent3)';}
+    else{cv.textContent=`✗ 목표 미달 (${targetScore-total}점 부족)`;cv.style.color='#fca5a5';}
+  }
+  const ct=document.getElementById('compactTarget');
+  if(ct) ct.textContent=`목표 ${targetScore}점 · ${state.orgType==='public'?'공공기관':'민간'} ${state.floorArea.toLocaleString()}㎡`;
+
+  /* 분야별 컬러 필 */
+  const cc=document.getElementById('compactCats');
+  if(cc){
+    cc.innerHTML=Object.entries(CAT_INFO).map(([cat,info])=>{
+      const s=sc[cat];const pct=Math.round(s/info.max*100);
+      return`<span class="score-cat-pill" style="border-color:${info.color}22;color:${info.color}">
+        <span style="width:5px;height:5px;border-radius:50%;background:${info.color};flex-shrink:0;display:inline-block"></span>
+        ${CAT_SHORT[cat]}&nbsp;<b>${s}</b>
+      </span>`;
+    }).join('');
+  }
+}
+
+let _scoreExpanded=false;
+function toggleScorePanel(){
+  const card=document.getElementById('scorePanelCard');
+  if(!card)return;
+  _scoreExpanded=!_scoreExpanded;
+  if(_scoreExpanded){
+    card.classList.add('expanded');
+    document.body.style.overflow='hidden';
+    // 외부 터치로 닫기 위한 오버레이
+    if(!document.getElementById('scoreOverlay')){
+      const ov=document.createElement('div');
+      ov.id='scoreOverlay';
+      ov.style.cssText='position:fixed;inset:0;z-index:34;background:rgba(0,0,0,.4);backdrop-filter:blur(2px);';
+      ov.addEventListener('click',()=>toggleScorePanel());
+      document.body.appendChild(ov);
+    }
+  } else {
+    card.classList.remove('expanded');
+    const ov=document.getElementById('scoreOverlay');
+    if(ov)ov.remove();
+    document.body.style.overflow='';
+  }
 }
 
 /* INIT */
