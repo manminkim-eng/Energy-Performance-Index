@@ -284,16 +284,34 @@ input[type="number"]{-moz-appearance:textfield;}
 .pv-btn-print:hover{background:linear-gradient(135deg,#059669,#047857);transform:translateY(-1px);}
 .pv-btn-close{background:rgba(255,255,255,.06);color:#8fa8d4;border:1px solid #243352;padding:9px 14px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:inherit;transition:all .15s;}
 .pv-btn-close:hover{background:rgba(255,255,255,.12);color:#e8f0fe;}
-.pv-page-wrap{padding:30px 20px 50px;display:flex;justify-content:center;align-items:flex-start;min-height:calc(100vh - 56px);}
-/* 미리보기 A4: 실제 A4 210mm x 297mm, padding = 상18mm 좌우16mm 하20mm */
+.pv-page-wrap{
+  padding:20px 0 40px;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:calc(100vh - 56px);
+  overflow-x:hidden;
+}
+/* ── A4 시트 ──
+   실제 A4(210×297mm) = 794×1123px (@96dpi)
+   transform:scale()로 모바일에서 비율 유지 축소
+   JS의 scaleA4() 함수가 동적 scale 값을 설정
+*/
 .a4-sheet{
-  width:210mm;
+  /* 고정 A4 픽셀 크기 유지 */
+  width:794px;
+  min-height:1123px;
   background:#fff;color:#1a2744;
   border-radius:2px;
   box-shadow:0 8px 60px rgba(0,0,0,.6);
-  padding:18mm 16mm 20mm;
+  padding:68px 60px 76px;   /* 18mm 16mm 20mm → px 변환 */
   font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
   font-size:10pt;
+  /* transform-origin 왼쪽 상단 기준 — JS에서 scale 적용 */
+  transform-origin:top center;
+  transition:transform .2s ease;
+  /* 스케일 후 실제 점유 높이를 줄여 스크롤 여백 정리 */
+  margin-bottom:0;
 }
 /* 미리보기에서 pg-hd 숨김 (화면 1장이므로) */
 .a4-sheet .a4-pg-hd{display:none;}
@@ -432,11 +450,14 @@ input[type="number"]{-moz-appearance:textfield;}
   .app-header,.tab-bar,.main-wrap,.help-btn,.modal-bd,.pv-backdrop{display:none!important;}
   #print-layer{display:block!important;}
 
-  /* A4 시트 인쇄 */
+  /* A4 시트 인쇄: scale 해제 후 @page margin이 여백 처리 */
   #print-layer .a4-sheet{
     width:100%!important;
+    min-height:unset!important;
     box-shadow:none!important;border-radius:0!important;
-    padding:0!important; /* @page margin이 여백 처리 */
+    padding:0!important;
+    transform:none!important;
+    transform-origin:unset!important;
   }
   /* 인쇄 시 pg-hd 표시 */
   #print-layer .a4-pg-hd{display:flex!important;}
@@ -598,15 +619,23 @@ input[type="number"]{-moz-appearance:textfield;}
   .btn-ulink .ul-txt{display:none;}
   .config-row,.config-row-3{grid-template-columns:1fr;}
   .stab{padding:5px 8px;font-size:10px;}
-  .a4-sheet{width:100%;padding:10mm 7mm;}
+  /* a4-sheet 모바일: JS scaleA4()가 transform:scale()로 처리 */
   .a4-info-grid,.a4-sc-bars,.a4-mand-grid{grid-template-columns:1fr;}
   .a4-score-box{grid-template-columns:1fr;gap:8pt;}
   .main-wrap{padding:10px 10px calc(var(--score-bar-h) + 10px + env(safe-area-inset-bottom,0px));}
 }
+@media(max-width:520px){
+  /* 툴바 버튼 컴팩트 */
+  .pv-btn-print{padding:8px 14px;font-size:12px;}
+  .pv-btn-close{padding:8px 11px;font-size:12px;}
+  .pv-toolbar-title{font-size:12px;}
+  /* A4 미리보기 배경 어둡게 & 상단 여백 최소화 */
+  .pv-page-wrap{padding:12px 0 30px;}
+}
 @media(max-width:400px){
-  .pv-toolbar{flex-direction:column;gap:8px;}
+  .pv-toolbar{flex-direction:column;gap:6px;padding:8px 14px;}
   .pv-toolbar-btns{width:100%;display:flex;gap:6px;}
-  .pv-btn-print,.pv-btn-close{flex:1;justify-content:center;}
+  .pv-btn-print,.pv-btn-close{flex:1;justify-content:center;padding:8px 10px;}
   .score-bar-cats{display:none;}
 }
 </style>
@@ -1374,8 +1403,52 @@ ${[
 </div>`;
 }
 
-function openPreview(){buildA4();document.getElementById('pvBackdrop').classList.add('open');document.body.style.overflow='hidden';switchMainTab(1);}
-function closePreview(){document.getElementById('pvBackdrop').classList.remove('open');document.body.style.overflow='';switchMainTab(0);}
+/* ── A4 미리보기 스케일 계산 ──
+   A4 고정 폭 794px를 화면 폭에 맞게 scale 조정
+   비율 유지: height도 자동 비례 축소
+*/
+function scaleA4(){
+  const sheet=document.getElementById('a4Sheet');
+  if(!sheet)return;
+  const wrap=document.querySelector('.pv-page-wrap');
+  if(!wrap)return;
+
+  // 사용 가능한 뷰포트 폭 (toolbar 제외, 좌우 여백 40px)
+  const avail=Math.min(wrap.clientWidth, window.innerWidth) - 40;
+  const A4W=794; // A4 고정 px 폭
+  const A4H=1123;
+
+  if(avail >= A4W){
+    // 데스크탑: 스케일 불필요
+    sheet.style.transform='';
+    sheet.style.marginBottom='';
+    wrap.style.paddingBottom='40px';
+  } else {
+    // 모바일/태블릿: 비율 축소
+    const scale=avail/A4W;
+    sheet.style.transform=`scale(${scale})`;
+    sheet.style.transformOrigin='top center';
+    // 스케일 후 시트가 차지하는 실제 높이를 wrapper가 알 수 있도록 margin 보정
+    const scaledH=A4H*scale;
+    const diff=A4H-scaledH; // 줄어든 높이
+    sheet.style.marginBottom=`-${diff}px`;
+    wrap.style.paddingBottom='24px';
+  }
+}
+
+function openPreview(){
+  buildA4();
+  document.getElementById('pvBackdrop').classList.add('open');
+  document.body.style.overflow='hidden';
+  switchMainTab(1);
+  // DOM 렌더 후 스케일 적용
+  requestAnimationFrame(()=>requestAnimationFrame(scaleA4));
+}
+function closePreview(){
+  document.getElementById('pvBackdrop').classList.remove('open');
+  document.body.style.overflow='';
+  switchMainTab(0);
+}
 function doPrint(){const sh=document.getElementById('a4Sheet').cloneNode(true);const pl=document.getElementById('print-layer');pl.innerHTML='';pl.appendChild(sh);window.print();}
 function toggleModal(){const m=document.getElementById('helpModal');m.className=m.className.includes('open')?'modal-bd':'modal-bd open';}
 function closeModalOut(e){if(e.target===document.getElementById('helpModal'))toggleModal();}
@@ -1457,6 +1530,20 @@ function toggleScorePanel(){
   updateRegionInfo();updateTargetBanner();updateCondWarnings();updateScore();
   const today=new Date();
   document.getElementById('projDate').value=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+
+  // 창 크기 변경 / 화면 회전 시 A4 스케일 재계산
+  let _resizeTimer;
+  window.addEventListener('resize',()=>{
+    clearTimeout(_resizeTimer);
+    _resizeTimer=setTimeout(()=>{
+      if(document.getElementById('pvBackdrop').classList.contains('open')) scaleA4();
+    },80);
+  });
+  window.addEventListener('orientationchange',()=>{
+    setTimeout(()=>{
+      if(document.getElementById('pvBackdrop').classList.contains('open')) scaleA4();
+    },300);
+  });
 })();
 </script>
 
