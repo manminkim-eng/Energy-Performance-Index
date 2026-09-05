@@ -35,3 +35,13 @@
 - 테마 색상: #10b981 (에메랄드 그린)
 - 배경 색상: #0f1a2e (딥 네이비)
 - 오프라인 지원: ✓ (Service Worker 캐싱)
+
+## v5.4 (2026-09-05) — 별지서식 산정서 별도창
+| 항목 | 기존(v5.3) | 변경(v5.4) |
+|---|---|---|
+| 상단 탭바 | ⌨️ EPI 점수 산정 · 📑 정식 산정 · 📄 A4 검토서 | + 4번째 「🗗 별지서식 산정서 ↗」(우측 정렬·파란 강조) → `openFormalWin()` |
+| 별도창 | — | `index.html?view=formal` : `body.mm-formal-win` — 헤더·탭·점수바·FAB·배너·입력폼 숨김, 별지 제1호서식 A4(794px)만 표시 + 상단 고정바(🔄 갱신 · 🖨️ 인쇄/PDF · ✕ 닫기) |
+| 동기화 | 탭 진입 시 pull | 본창 React 상태(proj·cfg·sel) 변경 시 `localStorage['epi54_formal_snap']` 저장 → 별도창 `storage` 이벤트로 실시간 반영(+ 수동 갱신) |
+| 팝업 차단 | — | `window.open` 실패 시 토스트 후 정식 산정 탭으로 폴백 |
+| PDF 파일명 | — | 별도창 document.title = `EPI_산정서_별지1호서식_공사명_YYYYMMDD` |
+| sw.js | epi-v5.3.0 | epi-v5.4.0 |

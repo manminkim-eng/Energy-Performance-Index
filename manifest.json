@@ -1,7 +1,7 @@
 {
-  "name": "EPI 에너지성능지표 산정기 · MANMIN Ver-5.3",
+  "name": "EPI 에너지성능지표 산정기 · MANMIN Ver-5.4",
   "short_name": "성능지표",
-  "description": "건축물의 에너지절약설계기준 제15조 · EPI 4개 부문 배점·목표점(65/74) 판정·의무항목 체크 · A4 검토서 — MANMIN Ver-5.3 | ARCHITECT KIM MANMIN",
+  "description": "건축물의 에너지절약설계기준 제15조 · EPI 4개 부문 배점·목표점(65/74) 판정·의무항목 체크 · A4 검토서 — MANMIN Ver-5.4 | ARCHITECT KIM MANMIN",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f4f6f9",

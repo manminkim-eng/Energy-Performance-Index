@@ -19,7 +19,7 @@ const mmMatch = (req, opt) => caches.keys()
   .then((ks) => ks.reduce((p, k) => p.then((r) => r || caches.open(k).then((c) => c.match(req, opt))), Promise.resolve(undefined)))
   .then((r) => (r && r.type === 'opaque' && req && req.mode === 'cors') ? undefined : r);
 
-const CACHE  = 'epi-v5.3.0';
+const CACHE  = 'epi-v5.4.0';
 const ORPHAN = ['epi-v3-0'];
 const ASSETS = [
   './', './index.html', './manifest.json',

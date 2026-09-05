@@ -4,7 +4,7 @@
   <script defer src="/manmin-blog-report/web/assets/manmin-analytics.js"></script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
-<title>EPI 에너지성능지표 산정기 · MANMIN Ver-5.3</title>
+<title>EPI 에너지성능지표 산정기 · MANMIN Ver-5.4</title>
 <!-- PWA -->
 <link rel="manifest" href="./manifest.json"/>
 <meta name="theme-color" content="#15803d"/>
@@ -138,6 +138,25 @@ input[type="number"]{-moz-appearance:textfield;}
   white-space:nowrap;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
 .tb:hover{color:#fff;background:rgba(255,255,255,.09);}
 .tb.active{color:#fff;background:#15803d;border-bottom-color:#86efac;}
+.tb.tb-win{color:#bfdbfe;margin-left:auto;}
+.tb.tb-win:hover{color:#fff;background:rgba(59,130,246,.28);}
+/* v5.4 — 별지서식 산정서 별도창 (?view=formal) */
+#mm-formal-winbar{display:none;position:sticky;top:0;z-index:60;background:#1e3a5f;color:#fff;padding:9px 16px;align-items:center;gap:10px;flex-wrap:wrap;box-shadow:0 2px 8px rgba(0,0,0,.25);}
+#mm-formal-winbar .wb-tit{font-weight:900;font-size:13px;letter-spacing:.03em;flex:1;min-width:200px;}
+#mm-formal-winbar .wb-sub{font-size:10px;color:#cbd5e1;font-weight:500;margin-left:6px;}
+#mm-formal-winbar button{border:none;border-radius:8px;padding:7px 13px;font-family:var(--font-base);font-weight:800;font-size:12px;cursor:pointer;white-space:nowrap;}
+#mm-formal-winbar .wb-print{background:#fff;color:#1e3a5f;}
+#mm-formal-winbar .wb-sync{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.35)!important;}
+#mm-formal-winbar .wb-close{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.35)!important;}
+body.mm-formal-win{background:#e2e8f0;}
+body.mm-formal-win #mm-formal-winbar{display:flex;}
+body.mm-formal-win .app-header,body.mm-formal-win .sum-bar-wrap,body.mm-formal-win #tab-main,body.mm-formal-win #tab-print,
+body.mm-formal-win #fab-group,body.mm-formal-win #pwa-banner,body.mm-formal-win .score-panel{display:none!important;}
+body.mm-formal-win #tab-formal{display:block!important;}
+body.mm-formal-win .f6-main-outer:not(.f6-main-inner){display:none!important;}
+body.mm-formal-win .f6-main-inner>*:not(#f6-rpt-outer){display:none!important;}
+body.mm-formal-win .f6-main-inner{padding-top:14px;}
+body.mm-formal-win .f6-rpt-outer{border-radius:0;margin-bottom:0;background:#e2e8f0;}
 .tab-panel{display:none;width:100%;}
 .tab-panel.active{display:block;}
 /* v5.0-HDR — 요약 스트립 (헤더 3층) */
@@ -826,6 +845,13 @@ body.mm-print-tab .score-panel{display:none;}   /* A4 탭에서는 모바일 하
 </style>
 </head>
 <body>
+<!-- v5.4 — 별지서식 산정서 별도창 상단바 (?view=formal 일 때만 표시) -->
+<div id="mm-formal-winbar" class="no-print">
+  <div class="wb-tit">📑 에너지성능지표(EPI) 산정서 — 별지 제1호서식 <span class="wb-sub">본창의 배점 선택값과 자동 동기화 · A4 원본 크기</span></div>
+  <button class="wb-sync" onclick="mmFormalWinSync()" title="본창의 최신 입력값으로 다시 읽기">🔄 갱신</button>
+  <button class="wb-print" onclick="printFormal()" title="인쇄 · PDF 저장">🖨️ 인쇄 / PDF</button>
+  <button class="wb-close" onclick="window.close()" title="창 닫기">✕ 닫기</button>
+</div>
 
 <!-- ══ HEADER (v5.0 §3-1 · §18-1 — 3단 · 버튼 0개(설치·열관류율 링크·초기화 제거 → FAB·배너) · 탭은 헤더 안 · 로고 base64 삭제) ══ -->
 <header class="app-header no-print">
@@ -836,7 +862,7 @@ body.mm-print-tab .score-panel{display:none;}   /* A4 탭에서는 모바일 하
         <h1 class="hdr-h1">EPI 에너지성능지표 산정기</h1>
         <div class="hdr-sub">
           4개 부문 배점 산정 · 목표점 65·74 판정 · 의무항목 체크 · A4 검토서 · <b>정식 산정(별지 제1호서식 42항목)</b>
-          <span class="hdr-manmin">MANMIN · Ver-5.3</span>
+          <span class="hdr-manmin">MANMIN · Ver-5.4</span>
         </div>
       </div>
     </div>
@@ -850,6 +876,7 @@ body.mm-print-tab .score-panel{display:none;}   /* A4 탭에서는 모바일 하
       <button class="tb active" onclick="goTab('main',this)">⌨️ EPI 점수 산정</button>
       <button class="tb" onclick="goTab('formal',this)">📑 정식 산정 (별지서식)</button>
       <button class="tb" onclick="goTab('print',this)">📄 A4 검토서</button>
+      <button class="tb tb-win" onclick="openFormalWin()" title="에너지성능지표(EPI) 산정서 — 별지 제1호서식을 새 창에서 열기 (인쇄·PDF)">🗗 별지서식 산정서 ↗</button>
     </div>
   </nav>
 </header>
@@ -1088,7 +1115,7 @@ body.mm-print-tab .score-panel{display:none;}   /* A4 탭에서는 모바일 하
     </div>
     <div id="a4-body"><div class="a4-sheet" id="a4Sheet"></div></div>
     <div class="mm-a4-footer">
-      <span>EPI 에너지성능지표 산정기 [MANMIN-Ver5.3]</span>
+      <span>EPI 에너지성능지표 산정기 [MANMIN-Ver5.4]</span>
       <span>약식 전략 검토 · 정식 산정은 별지 제1호서식 산정서 참조</span>
       <span>작성일: <span id="a4-foot-date">—</span></span>
     </div>
@@ -1549,7 +1576,7 @@ function buildA4(){
   <div class="a4-hd-l">
     <div class="a4-hd-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
     <div><div class="a4-hd-title">EPI 설계전략 검토서 (약식)</div>
-    <div class="a4-hd-sub">건축물의 에너지절약설계기준 제6조 &nbsp;·&nbsp; 국토교통부 고시 제2025-738호 &nbsp;·&nbsp; MANMIN Ver-5.3</div></div>
+    <div class="a4-hd-sub">건축물의 에너지절약설계기준 제6조 &nbsp;·&nbsp; 국토교통부 고시 제2025-738호 &nbsp;·&nbsp; MANMIN Ver-5.4</div></div>
   </div>
   <div class="a4-hd-r"><div class="a4-hd-date">작성일: ${projDate}</div><div class="a4-hd-law">2025.12.31 시행</div></div>
 </div>
@@ -1595,7 +1622,7 @@ ${[
   <!-- 2페이지 이후 각 섹션 상단에 간략 헤더 (인쇄 시 표시) -->
   <div class="a4-pg-hd" style="${idx===0?'margin-top:8pt;':''}">
     <div class="a4-pg-hd-title">EPI 설계전략 검토서(약식) — ${projName}</div>
-    <div class="a4-pg-hd-right">MANMIN Ver-5.3 &nbsp;|&nbsp; ${projDate}</div>
+    <div class="a4-pg-hd-right">MANMIN Ver-5.4 &nbsp;|&nbsp; ${projDate}</div>
   </div>
   <div class="a4-sec-title" style="border-left-color:${catC[cat]};color:${catC[cat]}">${title}&nbsp;&nbsp;(${sc[cat]}/${CAT_INFO[cat].max}점)</div>
   <table class="a4-tbl">
@@ -1616,7 +1643,7 @@ ${[
 </div>`).join('')}
 <div class="a4-footer">
   <div class="a4-footer-note">※ 국토교통부 고시 제2025-738호 기준으로 산정되었습니다.<br>※ 연면적 기준에 따라 목표점수 및 의무항목이 적용됩니다. 실제 허가 제출 시 설계도서와 일치 여부를 반드시 확인하십시오.</div>
-  <div class="a4-footer-brand">MANMIN Ver-5.3</div>
+  <div class="a4-footer-brand">MANMIN Ver-5.4</div>
 </div>`;
 }
 
@@ -1770,6 +1797,18 @@ window.openPreview=function(){ goTab('print'); }; window.closePreview=function()
 window.switchMainTab=function(){}; window.scaleA4=function(){ if(window._scaleA4) window._scaleA4(); };
 function mmToast(msg){ var el=document.getElementById('mm-toast'); if(!el) return; el.textContent=msg; el.classList.add('show'); clearTimeout(el._t); el._t=setTimeout(function(){ el.classList.remove('show'); },2400); }
 
+/* v5.4 — 별지서식 산정서 별도창 : ?view=formal 이면 서식만 표시 · localStorage 스냅샷(epi54_formal_snap) + storage 이벤트로 본창과 실시간 동기화 */
+window.MM_FORMAL_WIN=/[?&]view=formal(?:&|$)/.test(location.search);
+window.MM_SNAP_KEY='epi54_formal_snap';
+if(window.MM_FORMAL_WIN){ document.body.classList.add('mm-formal-win','mm-formal-tab','mm-print-tab'); }
+window.openFormalWin=function(){
+  try{ window.dispatchEvent(new Event('mm-formal-open')); }catch(e){}   /* v5 입력값 → 정식 산정 동기화 → 스냅샷 저장 */
+  var url=location.pathname+'?view=formal';
+  var w=null; try{ w=window.open(url,'epi_formal_win','width=920,height=1040,scrollbars=yes,resizable=yes'); }catch(e){}
+  if(!w){ mmToast('팝업이 차단되어 정식 산정 탭으로 이동합니다'); goTab('formal'); return; }
+  try{ w.focus(); }catch(e){}
+};
+window.mmFormalWinSync=function(){ if(typeof window.__f6applySnap==='function'){ window.__f6applySnap(); mmToast('본창 값으로 갱신했습니다'); } };
 window.goTab=function(id,btn){
   document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
   document.querySelectorAll('.tb').forEach(function(b){ b.classList.remove('active'); });
@@ -1821,6 +1860,7 @@ window.printFormal=function(){
   var _r=function(){ document.title=_t; window.removeEventListener('afterprint',_r); if(back!=='formal') goTab(back); };
   window.addEventListener('afterprint',_r); setTimeout(function(){ window.print(); setTimeout(_r,1500); },350);
 };
+if(window.MM_FORMAL_WIN){ window.addEventListener('DOMContentLoaded',function(){ goTab('formal'); }); if(document.readyState!=='loading'){ goTab('formal'); } }
 function scaleA4Page(){
   var wrap=document.getElementById('a4ScaleWrap'), outer=document.getElementById('a4Wrap'); if(!wrap||!outer) return;
   if(window.matchMedia('print').matches){ wrap.style.transform='none'; wrap.style.height=''; return; }
@@ -1867,7 +1907,7 @@ window.exportA4Jpg=function(){
   markLongTables(el); var segs=mmSegments(el), fullH=Math.max(mmContentHeight(el),1);
   html2canvas(el,{scale:2,useCORS:true,allowTaint:false,backgroundColor:'#ffffff',logging:false,width:el.scrollWidth,height:fullH,windowWidth:el.scrollWidth,windowHeight:fullH,scrollX:0,scrollY:0}).then(function(canvas){
     restoreScale(); var now=new Date(), ts=now.getFullYear()+''+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0')+'_'+String(now.getHours()).padStart(2,'0')+String(now.getMinutes()).padStart(2,'0');
-    var base='EPI_설계전략검토서_약식_MANMIN-Ver5.3_'+ts;
+    var base='EPI_설계전략검토서_약식_MANMIN-Ver5.4_'+ts;
     if(!segs||!segs.length){ mmDownload(canvas.toDataURL('image/jpeg',0.95), base+'.jpg'); mmToast('✅ JPG 저장 완료!'); return; }
     var S=canvas.width/el.scrollWidth, PAGE_W=MM_PAGE.W, PAGE_H=MM_PAGE.H, mmPerPx=210/PAGE_W, topPx=MM_PAGE.MT/mmPerPx;
     var shots=segs.map(function(sg,idx){ var h=Math.max(1,Math.round((sg[1]-sg[0])*S)); var tmp=document.createElement('canvas'); tmp.width=Math.round(PAGE_W*S); tmp.height=Math.round(PAGE_H*S); var ctx=tmp.getContext('2d'); ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,tmp.width,tmp.height); ctx.drawImage(canvas,0,Math.round(sg[0]*S),canvas.width,h,0,Math.round(topPx*S),canvas.width,h); if(segs.length>1){ var fs=Math.round(9*S); ctx.fillStyle='#9CA3AF'; ctx.font='700 '+fs+'px Orbitron, "JetBrains Mono", monospace'; ctx.textAlign='left'; ctx.textBaseline='alphabetic'; ctx.fillText((idx+1)+' / '+segs.length, Math.round(MM_PAGE.ML/mmPerPx*S), Math.round((MM_PAGE.H-MM_PAGE.MB/mmPerPx+fs/S*0.4)*S)); } return tmp.toDataURL('image/jpeg',0.95); });
@@ -2037,7 +2077,7 @@ const BD = "1px solid #d1d5db";
 const ACCENT = "#1d4ed8";          // 건축 분야 액센트
 const ACCENT_BG = "#eff6ff";
 const HEADER_GRAD = "linear-gradient(135deg,#0f172a,#1e3a5f,#1d4ed8)";
-const VER = "MANMIN Ver-5.3 · 정식 산정 엔진 v6";
+const VER = "MANMIN Ver-5.4 · 정식 산정 엔진 v6";
 
 const TARGET_PRIVATE = 65;   // 제15조① — 평점합계 65점 이상 적합
 const TARGET_PUBLIC  = 74;   // 제15조① 단서 — 공공기관 신축(별동 증축 포함) 74점 이상
@@ -2304,9 +2344,33 @@ function App(){
   const [sel,setSel]=useState({});   // key `${sec}-${no}` → option value
   const setS=(k,v)=>setSel(p=>({...p,[k]:v}));
 
+  /* v5.4 별도창 모드 — 스냅샷 적용 · 본창 모드 — 스냅샷 저장 */
+  const WIN=!!window.MM_FORMAL_WIN, SNAP_KEY=window.MM_SNAP_KEY||'epi54_formal_snap';
+  function applySnap(){
+    try{
+      const s=JSON.parse(localStorage.getItem(SNAP_KEY)||'null'); if(!s) return;
+      if(s.proj) setProj(s.proj); if(s.cfg) setCfg(s.cfg); if(s.sel) setSel(s.sel);
+      const put=(id,v)=>{ const el=document.getElementById(id); if(el) el.value=v||''; };
+      if(s.proj){ put('projName',s.proj.name); put('projAuthor',s.proj.designer); put('projDate',s.proj.date); }
+      if(typeof mmPdfName==='function') document.title=mmPdfName('formal');
+    }catch(e){}
+  }
+  useEffect(()=>{
+    if(!WIN) return;
+    window.__f6applySnap=applySnap; applySnap();
+    const onStorage=e=>{ if(!e.key||e.key===SNAP_KEY) applySnap(); };
+    window.addEventListener('storage',onStorage);
+    return ()=>window.removeEventListener('storage',onStorage);
+  },[]);
+  useEffect(()=>{
+    if(WIN) return;
+    try{ localStorage.setItem(SNAP_KEY,JSON.stringify({proj,cfg,sel,ts:Date.now()})); }catch(e){}
+  },[proj,cfg,sel]);
+
   /* v5 「EPI 점수 산정」 탭 입력값 동기화 (지역·연면적·기관·용도·공사정보) */
   useEffect(()=>{
     function pull(){
+      if(WIN) return;   /* 별도창은 스냅샷만 사용 */
       try{
         const st=(typeof state!=='undefined')?state:window.state; if(!st) return;
         const area=+st.floorArea||0;
