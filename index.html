@@ -4,7 +4,7 @@
   <script defer src="/manmin-blog-report/web/assets/manmin-analytics.js"></script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
-<title>EPI 에너지성능지표 산정기 · MANMIN Ver-5.2</title>
+<title>EPI 에너지성능지표 산정기 · MANMIN Ver-5.3</title>
 <!-- PWA -->
 <link rel="manifest" href="./manifest.json"/>
 <meta name="theme-color" content="#15803d"/>
@@ -289,6 +289,7 @@ input[type="number"]{-moz-appearance:textfield;}
 .btn-export,.mm-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 16px;border-radius:9px;font-size:12px;font-weight:800;cursor:pointer;border:none;font-family:inherit;white-space:nowrap;line-height:1.2;min-height:38px;transition:background .15s,box-shadow .15s,transform .1s;}
 .mm-btn-print{background:#15803d;color:#fff;} .mm-btn-print:hover{background:#166534;}
 .mm-btn-jpg{background:#7e22ce;color:#fff;} .mm-btn-jpg:hover{background:#6b21a8;}
+.mm-btn-formal{background:#1d4ed8;color:#fff;} .mm-btn-formal:hover{background:#1e40af;}
 @media(max-width:480px){ .a4-export-bar{flex-direction:column;align-items:stretch;} .bar-spacer{display:none;} .a4-export-bar .btn-export,.a4-export-bar .mm-btn{width:100%;} }
 .a4-wrap{background:#64748b;padding:20px 20px 32px;min-height:300px;display:flex;justify-content:center;align-items:flex-start;border-radius:10px;overflow:hidden;}
 @media(max-width:640px){.a4-wrap{padding:8px 8px 24px;} .a4-panel{padding:16px 0 60px;}}
@@ -835,7 +836,7 @@ body.mm-print-tab .score-panel{display:none;}   /* A4 탭에서는 모바일 하
         <h1 class="hdr-h1">EPI 에너지성능지표 산정기</h1>
         <div class="hdr-sub">
           4개 부문 배점 산정 · 목표점 65·74 판정 · 의무항목 체크 · A4 검토서 · <b>정식 산정(별지 제1호서식 42항목)</b>
-          <span class="hdr-manmin">MANMIN · Ver-5.2</span>
+          <span class="hdr-manmin">MANMIN · Ver-5.3</span>
         </div>
       </div>
     </div>
@@ -1071,23 +1072,24 @@ body.mm-print-tab .score-panel{display:none;}   /* A4 탭에서는 모바일 하
 <div class="tab-panel" id="tab-print">
 <div class="a4-panel">
   <div class="a4-export-bar no-print">
-    <span class="bar-lbl">📄 A4 출력 : <span class="bar-hint">공사명·작성자·작성일은 「EPI 점수 산정」 공사 정보에서 입력</span></span>
+    <span class="bar-lbl">📄 A4 출력 : <span class="bar-hint">① 약식 검토서(아래 미리보기) · ② 별지 제1호서식 산정서(정식 산정 탭) — 공사명·작성자·작성일은 「EPI 점수 산정」 공사 정보에서 입력</span></span>
     <span class="bar-spacer"></span>
-    <button class="mm-btn mm-btn-print" onclick="printA4()">🖨️ 인쇄 / PDF 저장</button>
+    <button class="mm-btn mm-btn-print" onclick="printA4()" title="EPI 설계전략 검토서 (약식 체크리스트) 인쇄">🖨️ 약식 검토서 출력</button>
+    <button class="mm-btn mm-btn-formal" onclick="printFormal()" title="에너지성능지표(EPI) 산정서 — 별지 제1호서식 인쇄">🖨️ 별지서식 산정서 출력</button>
     <button class="mm-btn mm-btn-jpg" id="btn-jpg" onclick="exportA4Jpg()">🖼️ JPG 저장</button>
   </div>
   <div class="a4-wrap" id="a4Wrap">
   <div class="a4-scale-wrap" id="a4ScaleWrap">
   <div class="a4-page" id="a4Page">
-    <div class="a4-tit">에너지성능지표(EPI) 검토서</div>
+    <div class="a4-tit">EPI 설계전략 검토서 <span style="font-size:13px;font-weight:700;color:#475569;">(약식 체크리스트)</span></div>
     <div class="a4-head2">
       <div class="a4-proj">공사명 : <span id="a4-projName">—</span></div>
       <div class="a4-meta">근거 : 건축물의 에너지절약설계기준 제15조 · 국토교통부고시 제2026-360호<br/>작성일 : <span id="a4-projDate">—</span><br/>작성자 : <span id="a4-projAuthor">—</span></div>
     </div>
     <div id="a4-body"><div class="a4-sheet" id="a4Sheet"></div></div>
     <div class="mm-a4-footer">
-      <span>EPI 에너지성능지표 산정기 [MANMIN-Ver5.2]</span>
-      <span>건축물의 에너지절약설계기준 제15조 · 별지 제1호 서식</span>
+      <span>EPI 에너지성능지표 산정기 [MANMIN-Ver5.3]</span>
+      <span>약식 전략 검토 · 정식 산정은 별지 제1호서식 산정서 참조</span>
       <span>작성일: <span id="a4-foot-date">—</span></span>
     </div>
   </div><!-- /a4-page -->
@@ -1546,8 +1548,8 @@ function buildA4(){
 <div class="a4-hd">
   <div class="a4-hd-l">
     <div class="a4-hd-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-    <div><div class="a4-hd-title">에너지성능지표(EPI) 검토서</div>
-    <div class="a4-hd-sub">건축물의 에너지절약설계기준 제6조 &nbsp;·&nbsp; 국토교통부 고시 제2025-738호 &nbsp;·&nbsp; MANMIN Ver-5.2</div></div>
+    <div><div class="a4-hd-title">EPI 설계전략 검토서 (약식)</div>
+    <div class="a4-hd-sub">건축물의 에너지절약설계기준 제6조 &nbsp;·&nbsp; 국토교통부 고시 제2025-738호 &nbsp;·&nbsp; MANMIN Ver-5.3</div></div>
   </div>
   <div class="a4-hd-r"><div class="a4-hd-date">작성일: ${projDate}</div><div class="a4-hd-law">2025.12.31 시행</div></div>
 </div>
@@ -1592,8 +1594,8 @@ ${[
 <div class="a4-cat-block">
   <!-- 2페이지 이후 각 섹션 상단에 간략 헤더 (인쇄 시 표시) -->
   <div class="a4-pg-hd" style="${idx===0?'margin-top:8pt;':''}">
-    <div class="a4-pg-hd-title">에너지성능지표(EPI) 검토서 — ${projName}</div>
-    <div class="a4-pg-hd-right">MANMIN Ver-5.2 &nbsp;|&nbsp; ${projDate}</div>
+    <div class="a4-pg-hd-title">EPI 설계전략 검토서(약식) — ${projName}</div>
+    <div class="a4-pg-hd-right">MANMIN Ver-5.3 &nbsp;|&nbsp; ${projDate}</div>
   </div>
   <div class="a4-sec-title" style="border-left-color:${catC[cat]};color:${catC[cat]}">${title}&nbsp;&nbsp;(${sc[cat]}/${CAT_INFO[cat].max}점)</div>
   <table class="a4-tbl">
@@ -1614,7 +1616,7 @@ ${[
 </div>`).join('')}
 <div class="a4-footer">
   <div class="a4-footer-note">※ 국토교통부 고시 제2025-738호 기준으로 산정되었습니다.<br>※ 연면적 기준에 따라 목표점수 및 의무항목이 적용됩니다. 실제 허가 제출 시 설계도서와 일치 여부를 반드시 확인하십시오.</div>
-  <div class="a4-footer-brand">MANMIN Ver-5.2</div>
+  <div class="a4-footer-brand">MANMIN Ver-5.3</div>
 </div>`;
 }
 
@@ -1803,8 +1805,21 @@ window.renderA4=function(){
 };
 ['projName','projAuthor','projDate'].forEach(function(id){ var el=document.getElementById(id); if(el) el.addEventListener('input',function(){ var t=document.getElementById('tab-print'); if(t&&t.classList.contains('active')) renderA4(); }); });
 
+/* v5.3 — 출력물 2종 구분: ① 약식 검토서 / ② 별지 제1호서식 산정서 · PDF 저장 파일명 = document.title */
+function mmPdfName(kind){
+  var g=function(id){ var el=document.getElementById(id); return el?(el.value||'').trim():''; };
+  var nm=(g('projName')||'공사명미입력').replace(/[\\/:*?"<>|]/g,'_');
+  var d=(g('projDate')||new Date().toISOString().slice(0,10)).replace(/-/g,'');
+  return (kind==='formal'?'EPI_산정서_별지1호서식_':'EPI_설계전략검토서_약식_')+nm+'_'+d;
+}
 window.printA4=function(){
-  goTab('print'); var _t=document.title; document.title=' '; var _r=function(){ document.title=_t; window.removeEventListener('afterprint',_r); }; window.addEventListener('afterprint',_r); setTimeout(function(){ window.print(); setTimeout(_r,1500); },200);   /* §20-15 */
+  goTab('print'); var _t=document.title; document.title=mmPdfName('brief'); var _r=function(){ document.title=_t; window.removeEventListener('afterprint',_r); }; window.addEventListener('afterprint',_r); setTimeout(function(){ window.print(); setTimeout(_r,1500); },200);   /* §20-15 */
+};
+window.printFormal=function(){
+  var back=(document.querySelector('.tab-panel.active')||{}).id; back=back?back.replace('tab-',''):'print';
+  goTab('formal'); var _t=document.title; document.title=mmPdfName('formal');
+  var _r=function(){ document.title=_t; window.removeEventListener('afterprint',_r); if(back!=='formal') goTab(back); };
+  window.addEventListener('afterprint',_r); setTimeout(function(){ window.print(); setTimeout(_r,1500); },350);
 };
 function scaleA4Page(){
   var wrap=document.getElementById('a4ScaleWrap'), outer=document.getElementById('a4Wrap'); if(!wrap||!outer) return;
@@ -1852,7 +1867,7 @@ window.exportA4Jpg=function(){
   markLongTables(el); var segs=mmSegments(el), fullH=Math.max(mmContentHeight(el),1);
   html2canvas(el,{scale:2,useCORS:true,allowTaint:false,backgroundColor:'#ffffff',logging:false,width:el.scrollWidth,height:fullH,windowWidth:el.scrollWidth,windowHeight:fullH,scrollX:0,scrollY:0}).then(function(canvas){
     restoreScale(); var now=new Date(), ts=now.getFullYear()+''+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0')+'_'+String(now.getHours()).padStart(2,'0')+String(now.getMinutes()).padStart(2,'0');
-    var base='성능지표_EPI_검토서_MANMIN-Ver5.2_'+ts;
+    var base='EPI_설계전략검토서_약식_MANMIN-Ver5.3_'+ts;
     if(!segs||!segs.length){ mmDownload(canvas.toDataURL('image/jpeg',0.95), base+'.jpg'); mmToast('✅ JPG 저장 완료!'); return; }
     var S=canvas.width/el.scrollWidth, PAGE_W=MM_PAGE.W, PAGE_H=MM_PAGE.H, mmPerPx=210/PAGE_W, topPx=MM_PAGE.MT/mmPerPx;
     var shots=segs.map(function(sg,idx){ var h=Math.max(1,Math.round((sg[1]-sg[0])*S)); var tmp=document.createElement('canvas'); tmp.width=Math.round(PAGE_W*S); tmp.height=Math.round(PAGE_H*S); var ctx=tmp.getContext('2d'); ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,tmp.width,tmp.height); ctx.drawImage(canvas,0,Math.round(sg[0]*S),canvas.width,h,0,Math.round(topPx*S),canvas.width,h); if(segs.length>1){ var fs=Math.round(9*S); ctx.fillStyle='#9CA3AF'; ctx.font='700 '+fs+'px Orbitron, "JetBrains Mono", monospace'; ctx.textAlign='left'; ctx.textBaseline='alphabetic'; ctx.fillText((idx+1)+' / '+segs.length, Math.round(MM_PAGE.ML/mmPerPx*S), Math.round((MM_PAGE.H-MM_PAGE.MB/mmPerPx+fs/S*0.4)*S)); } return tmp.toDataURL('image/jpeg',0.95); });
@@ -2022,7 +2037,7 @@ const BD = "1px solid #d1d5db";
 const ACCENT = "#1d4ed8";          // 건축 분야 액센트
 const ACCENT_BG = "#eff6ff";
 const HEADER_GRAD = "linear-gradient(135deg,#0f172a,#1e3a5f,#1d4ed8)";
-const VER = "MANMIN Ver-5.2 · 정식 산정 엔진 v6";
+const VER = "MANMIN Ver-5.3 · 정식 산정 엔진 v6";
 
 const TARGET_PRIVATE = 65;   // 제15조① — 평점합계 65점 이상 적합
 const TARGET_PUBLIC  = 74;   // 제15조① 단서 — 공공기관 신축(별동 증축 포함) 74점 이상
@@ -2386,7 +2401,7 @@ function App(){
         </div>
         <div style={{display:"flex",gap:8}}>
           <button className="f6-no-print" onClick={()=>setShowHow(true)} style={{padding:"8px 14px",background:"rgba(255,255,255,.14)",color:"white",border:"1px solid rgba(255,255,255,.3)",borderRadius:9,cursor:"pointer",fontWeight:700,fontSize:12}}>📐 이용방법</button>
-          <button className="f6-no-print" onClick={()=>window.print()} style={{padding:"8px 14px",background:"#fff",color:"#1e3a5f",border:"none",borderRadius:9,cursor:"pointer",fontWeight:800,fontSize:12}}>🖨️ 인쇄 / PDF</button>
+          <button className="f6-no-print" onClick={()=>window.printFormal()} style={{padding:"8px 14px",background:"#fff",color:"#1e3a5f",border:"none",borderRadius:9,cursor:"pointer",fontWeight:800,fontSize:12}}>🖨️ 별지서식 산정서 출력</button>
         </div>
       </div>
     </div>
@@ -2457,9 +2472,9 @@ function App(){
 
       {/* 인쇄 버튼 */}
       <div className="no-print" style={{textAlign:"center",margin:"18px 0",display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
-        <button onClick={()=>window.print()}
+        <button onClick={()=>window.printFormal()}
           style={{padding:"10px 24px",background:"#1e3a5f",color:"white",border:"none",borderRadius:10,cursor:"pointer",fontWeight:700,fontSize:13}}>
-          🖨️ 인쇄 / PDF 저장
+          🖨️ 별지서식 산정서 출력 (PDF)
         </button>
         <button onClick={()=>{if(confirm("모든 배점 선택을 초기화할까요?"))setSel({});}}
           style={{padding:"10px 20px",background:"white",color:"#374151",border:BD,borderRadius:10,cursor:"pointer",fontWeight:700,fontSize:13}}>
@@ -2475,8 +2490,8 @@ function App(){
 
             {/* 제목 */}
             <div style={{textAlign:"center",marginBottom:14,borderBottom:"3px double #334155",paddingBottom:10}}>
-              <div style={{fontSize:22,fontWeight:900,letterSpacing:"0.06em"}}>에너지성능지표(EPI) 검토서</div>
-              <div style={{fontSize:12,color:"#64748b",marginTop:6}}>건축물의 에너지절약설계기준 제15조 · 별지 제1호서식 2. 에너지성능지표 — 국토교통부고시 제2026-360호</div>
+              <div style={{fontSize:22,fontWeight:900,letterSpacing:"0.06em"}}>에너지성능지표(EPI) 산정서 — 별지 제1호서식</div>
+              <div style={{fontSize:12,color:"#64748b",marginTop:6}}>에너지절약계획 설계 검토서 「2. 에너지성능지표」 · 건축물의 에너지절약설계기준 제15조 — 국토교통부고시 제2026-360호</div>
               <table style={{margin:"12px auto 0",borderCollapse:"collapse"}}><tbody><tr>
                 {[["공사명",proj.name||"(미입력)"],["설계자",proj.designer||"(미입력)"],["작성일",proj.date]].map(([k,v])=>(
                   <td key={k} style={{border:BD,padding:"5px 14px",fontSize:12,whiteSpace:"nowrap"}}><b>{k}:</b> {v}</td>
