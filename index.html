@@ -4,7 +4,7 @@
   <script defer src="/manmin-blog-report/web/assets/manmin-analytics.js"></script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
-<title>EPI 에너지성능지표 산정기 · MANMIN Ver-5.0</title>
+<title>EPI 에너지성능지표 산정기 · MANMIN Ver-5.1</title>
 <!-- PWA -->
 <link rel="manifest" href="./manifest.json"/>
 <meta name="theme-color" content="#15803d"/>
@@ -703,7 +703,7 @@ body.mm-print-tab .score-panel{display:none;}   /* A4 탭에서는 모바일 하
         <h1 class="hdr-h1">EPI 에너지성능지표 산정기</h1>
         <div class="hdr-sub">
           4개 부문 배점 산정 · 목표점 65·74 판정 · 의무항목 체크 · A4 검토서
-          <span class="hdr-manmin">MANMIN · Ver-5.0</span>
+          <span class="hdr-manmin">MANMIN · Ver-5.1</span>
         </div>
       </div>
     </div>
@@ -871,7 +871,7 @@ body.mm-print-tab .score-panel{display:none;}   /* A4 탭에서는 모바일 하
           <strong>⚠ 연면적 500㎡ 이상</strong> — 에너지 절약 계획서 제출 의무 대상입니다.
         </div>
         <div class="cond-warn" id="condWarnCentral">
-          <strong>⚠ 중앙식 공조 방식 채택 시</strong> — 기계설비 3번(고효율 송풍기), 6번(폐열회수 환기), 9번(인버터 가변속) 3개 항목이 추가 의무화됩니다.
+          <strong>⚠ 중앙식 공조 방식 채택 시 (1,000㎡↑, 제15조④)</strong> — 기계 3번 배점 0.8 이상 · 6번 <b>공기조화기 부착형</b> 열회수형환기장치 설치 · 9번 공조기 팬 가변속제어 채택이 의무입니다.
         </div>
         <div id="regionInfo"></div>
       </div>
@@ -952,7 +952,7 @@ body.mm-print-tab .score-panel{display:none;}   /* A4 탭에서는 모바일 하
     </div>
     <div id="a4-body"><div class="a4-sheet" id="a4Sheet"></div></div>
     <div class="mm-a4-footer">
-      <span>EPI 에너지성능지표 산정기 [MANMIN-Ver5.0]</span>
+      <span>EPI 에너지성능지표 산정기 [MANMIN-Ver5.1]</span>
       <span>건축물의 에너지절약설계기준 제15조 · 별지 제1호 서식</span>
       <span>작성일: <span id="a4-foot-date">—</span></span>
     </div>
@@ -998,7 +998,8 @@ body.mm-print-tab .score-panel{display:none;}   /* A4 탭에서는 모바일 하
         <div class="help-sec-title">EPI 목표 점수 기준 (제2025-738호)</div>
         <div class="help-item"><div class="help-item-title">민간 건축물 (연면적 1,000㎡ 이상)</div><div class="help-item-desc">합계 <b>65점 이상</b> 획득 필수</div></div>
         <div class="help-item"><div class="help-item-title">공공기관 건축물 (연면적 1,000㎡ 이상)</div><div class="help-item-desc">합계 <b>74점 이상</b> 획득 필수</div></div>
-        <div class="help-item"><div class="help-item-title">1,000㎡ 미만</div><div class="help-item-desc">총점 60점 이상 적용 (일반 기준)</div></div>
+        <div class="help-item"><div class="help-item-title">1,000㎡ 미만 (500㎡↑ 제출대상)</div><div class="help-item-desc">목표점은 동일(65·74점) · 제15조③ 개별 의무항목만 미적용 · 500~2,000㎡ 단지 내 500㎡ 미만 개별동은 제15조 미적용 가능(제4조5호)</div></div>
+        <div class="help-item"><div class="help-item-title">전 제출대상 공통 의무 (제6조2호)</div><div class="help-item-desc">에너지성능지표 <b>건축부문 1번</b>(외벽 평균 열관류율) 배점 <b>0.6점 이상</b> 획득</div></div>
       </div>
       <div class="help-sec">
         <div class="help-sec-title">의무항목 (연면적 1,000㎡↑ 공통)</div>
@@ -1009,16 +1010,17 @@ body.mm-print-tab .score-panel{display:none;}   /* A4 탭에서는 모바일 하
       </div>
       <div class="help-sec">
         <div class="help-sec-title">공공기관 추가 의무항목</div>
-        <div class="help-item"><div class="help-item-title">기계 10번: 전기대체 냉방설비 (1,000㎡↑)</div><div class="help-item-desc">필수 0.6점 이상 · 전기를 사용하지 않는 냉방설비</div></div>
-        <div class="help-item"><div class="help-item-title">전기 8번: BEMS 구축 (10,000㎡↑)</div><div class="help-item-desc">필수 1.0점 · 빌딩에너지관리시스템 구축</div></div>
+        <div class="help-item"><div class="help-item-title">기계 10번: 전기대체 냉방설비 (제8조3호)</div><div class="help-item-desc">「공공기관 에너지이용 합리화 추진에 관한 규정」 제10조 적용 건축물 0.6점 이상 — <b>동 규정 제10조는 2026.4월 개정으로 삭제</b>되어 현재 적용 대상 없음(참고 표시)</div></div>
+        <div class="help-item"><div class="help-item-title">법 제14조의2 공공건축물 (영 제10조의2: 공공기관 소유·관리 업무·교육연구시설 3,000㎡↑)</div><div class="help-item-desc">건축 7번 0.6점↑(제6조5호) · <b>기계 1·2번 0.9점↑</b>(제8조4호) · <b>전기 8번 0.6점↑</b>(제10조4호)</div></div>
+        <div class="help-item"><div class="help-item-title">전기 8번: BEMS 구축 (10,000㎡↑ 신축·별동증축)</div><div class="help-item-desc">필수 1.0점(제10조5호 · 합리화규정 제6조②) — 공동주택·오피스텔·공장·발전시설 제외</div></div>
       </div>
       <div class="help-sec">
         <div class="help-sec-title">중앙식 공조 시 조건부 의무</div>
-        <div class="help-item"><div class="help-item-title">기계 3·6·9번 강제 적용</div><div class="help-item-desc">고효율 송풍기(3번) / 폐열회수 환기(6번) / 인버터 가변속(9번)</div></div>
+        <div class="help-item"><div class="help-item-title">기계 3·6·9번 (제15조④, 1,000㎡↑)</div><div class="help-item-desc">3번 송풍기 효율 배점 0.8 이상 / 6번 공기조화기 부착형 열회수형환기장치 설치 / 9번 공조기 팬 가변속제어 채택</div></div>
       </div>
       <div class="help-sec">
         <div class="help-sec-title">우회 전략 (제15조)</div>
-        <div class="help-item"><div class="help-item-title">전략1: 에너지소요량 시뮬레이션 (총량제)</div><div class="help-item-desc">민간 150 kWh/㎡·yr 미만 / 공공 130 kWh/㎡·yr 미만 달성 시 EPI 65점 충족 인정 + 개별 의무 면제</div></div>
+        <div class="help-item"><div class="help-item-title">전략1: 에너지소요량 시뮬레이션 (총량제)</div><div class="help-item-desc">1차 에너지소요량 민간 150 / 공공 130 / 1,000㎡ 미만 200 kWh/㎡·yr 미만(제21조②) 달성 시 제15조 미적용(제4조8호) · 평가서 의무대상은 업무·교육연구시설 3,000㎡↑(제21조①)</div></div>
         <div class="help-item"><div class="help-item-title">전략2: ZEB 예비인증 획득</div><div class="help-item-desc">제로에너지건축물 예비인증서 제출 시 EPI 작성·제출 자체 면제</div></div>
       </div>
     </div>
@@ -1070,25 +1072,25 @@ const EPI_ITEMS = {
     {id:'h3',g:'heat-items',name:'냉난방 존별 개별 제어',desc:'존별 개별 온도 제어 + 스마트 온도조절기',pts:2,b:'pts-2',sub:null},
     /* ★ 기계 6번 — 중앙식 공조 의무 */
     {id:'v1',g:'vent-items',name:'[기계 6번] 폐열회수형 환기장치 (HRV/ERV)',
-     desc:'열교환 효율 ≥ 70% · 중앙식 공조 시 의무 적용',
+     desc:'중앙식 공조 시 공기조화기 부착형 설치 의무(제15조④2호) · 개별장치는 열교환효율 배점',
      pts:3,b:'pts-3',sub:{l:'열교환 효율',o:['70~80%','80~90%','90% 이상']},
      mandatory:['central'],mandMin:0.8},
     {id:'v2',g:'vent-items',name:'CO₂ 농도 제어 환기 (DCV)',desc:'CO₂ 센서 연동 수요 기반 환기',pts:1,b:'pts-1',sub:null},
     {id:'v3',g:'vent-items',name:'고효율 급탕 시스템',desc:'태양열 또는 히트펌프 급탕 COP≥2.5',pts:2,b:'pts-2',sub:{l:'급탕 방식',o:['태양열 급탕(30% 이상)','히트펌프 급탕 COP≥2.5','폐열회수 급탕']}},
     /* ★ 기계 3번 — 중앙식 공조 의무 */
     {id:'hv1',g:'hvac-items',name:'[기계 3번] 고효율 공조용 송풍기',
-     desc:'공조용 송풍기에 최고 효율 등급 설비 채택 · 중앙식 공조 시 의무',
+     desc:'공조용 송풍기 효율 60% 이상(배점 1.0) · 중앙식 공조 시 0.8 이상 의무(제15조④1호)',
      pts:2,b:'pts-2',sub:null,mandatory:['central'],mandMin:0.8},
     /* ★ 기계 9번 — 중앙식 공조 의무 */
     {id:'hv2',g:'hvac-items',name:'[기계 9번] 가변속 제어 (인버터)',
-     desc:'부하에 따른 풍량 자동 조절 인버터 기민 도입 · 중앙식 공조 시 의무',
+     desc:'공조기 팬 동력 60% 이상 가변속제어 등 채택 · 중앙식 공조 시 채택 의무(제15조④3호)',
      pts:2,b:'pts-2',sub:null,mandatory:['central'],mandMin:0.8},
     {id:'hv3',g:'hvac-items',name:'공조기 열회수 최적화',desc:'외기 냉방 이코노마이저 적용',pts:1,b:'pts-1',sub:null},
     /* ★ 기계 10번 — 공공기관 1000m² 이상 의무 */
     {id:'pm1',g:'public-mech-items',name:'[기계 10번] 전기대체 냉방설비 (공공)',
-     desc:'전기를 사용하지 않는 냉방 설비 · 공공기관 1,000㎡↑ 의무 0.6점+',
+     desc:'비전기식 냉방(축냉·가스·지역냉방 등) 냉방용량 담당비율 · ※근거 규정(합리화규정 제10조) 2026.4 삭제 — 참고 항목',
      pts:2,b:'pts-2',sub:{l:'설비 종류',o:['흡수식 냉동기','가스 냉방','지역냉방 연계']},
-     mandatory:['public1000'],mandMin:0.6},
+     mandatory:[],mandMin:0},
     {id:'pm2',g:'public-mech-items',name:'열배관 단열 강화',desc:'배관 단열재 두께 법정기준 1.5배 이상',pts:1,b:'pts-1',sub:null},
   ],
   elec:[
@@ -1106,7 +1108,7 @@ const EPI_ITEMS = {
     /* ★ 전기 8번 — 공공기관 10,000m² 이상 의무 1.0점 */
     {id:'pe1',g:'public-elec-items',name:'[전기 8번] BEMS 시스템 구축 (공공)',
      desc:'빌딩에너지관리시스템(BEMS) 구축 · 공공기관 10,000㎡↑ 의무 1.0점',
-     pts:3,b:'pts-3',sub:null,mandatory:['public10000'],mandMin:1.0},
+     pts:3,b:'pts-3',sub:null,mandatory:['public10000','public3000'],mandMin:1.0},
     {id:'pe2',g:'public-elec-items',name:'스마트 미터링 시스템',desc:'에너지 사용량 실시간 모니터링 및 데이터 수집',pts:1,b:'pts-1',sub:null},
   ],
   renew:[
@@ -1144,12 +1146,14 @@ const state={checked:{},region:'중부2',bldType:'non_residential',orgType:'priv
 /* ── 연면적·기관 기반 로직 ── */
 function getTargetScore(){
   const a=state.floorArea,isP=state.orgType==='public';
-  if(a>=1000) return isP?74:65;
-  return 60;
+  // 제15조① — 연면적과 무관하게 65점(공공기관 신축 74점). 1,000㎡ 기준은 제15조③ 개별 의무항목에만 적용
+  return isP?74:65;
 }
 function isOver1000(){return state.floorArea>=1000;}
 function isPublic(){return state.orgType==='public';}
 function isPublicOver10000(){return isPublic()&&state.floorArea>=10000;}
+/* 법 제14조의2 · 영 제10조의2 — 공공기관 소유·관리 업무·교육연구시설 3,000㎡↑ (용도 확인은 사용자 판단) */
+function isPublicOver3000(){return isPublic()&&state.floorArea>=3000;}
 
 function isMandatoryActive(item){
   if(!item.mandatory) return false;
@@ -1157,6 +1161,7 @@ function isMandatoryActive(item){
     if(m==='all1000'&&isOver1000()) return true;
     if(m==='public1000'&&isPublic()&&isOver1000()) return true;
     if(m==='public10000'&&isPublicOver10000()) return true;
+    if(m==='public3000'&&isPublicOver3000()) return true;
     if(m==='central') return false; // 중앙식 공조는 별도 체크 (JS에서)
   }
   return false;
@@ -1239,8 +1244,10 @@ function getMandatoryStatus(){
     check('l1','전기1: 조명밀도 최소화',0.8,true);
     check('rn1','신재생: 에너지 확보',4.0,true);
   }
-  if(pub&&over1000) check('pm1','기계10: 전기대체 냉방(공공)',0.6,true);
-  if(pub10k) check('pe1','전기8: BEMS 구축(공공)',1.0,true);
+  const pub3k=isPublicOver3000();
+  if(pub3k){ check('h1','기계1: 고효율 난방(법14조의2 공공 0.9)',0.9,true); check('h2','기계2: 고효율 냉방(법14조의2 공공 0.9)',0.9,true); }
+  if(pub10k) check('pe1','전기8: BEMS 구축(공공 1만㎡↑)',1.0,true);
+  else if(pub3k) check('pe1','전기8: BEMS/원격검침(법14조의2 공공 0.6)',0.6,true);
   return items;
 }
 
@@ -1338,7 +1345,7 @@ function updateTargetBanner(){
   const over10k=isPublicOver10000();
   const bg=isPub?'tb-public':'tb-private';
   const iconBg=isPub?'#059669':'#1d4ed8';
-  let sub=`연면적 ${state.floorArea.toLocaleString()}㎡ · ${over?'1,000㎡ 이상 의무항목 적용':'1,000㎡ 미만 — 의무항목 없음'}`;
+  let sub=`연면적 ${state.floorArea.toLocaleString()}㎡ · ${over?'1,000㎡ 이상 제15조③ 의무항목 적용':'1,000㎡ 미만 — 제15조③ 개별 의무항목 미적용(건축1번 0.6점은 공통 의무)'}`;
   if(over10k) sub+=` · 10,000㎡ 이상 BEMS 의무`;
   document.getElementById('targetBanner').innerHTML=`
   <div class="target-banner ${bg}">
@@ -1406,7 +1413,7 @@ function buildA4(){
   <div class="a4-hd-l">
     <div class="a4-hd-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
     <div><div class="a4-hd-title">에너지성능지표(EPI) 검토서</div>
-    <div class="a4-hd-sub">건축물의 에너지절약설계기준 제6조 &nbsp;·&nbsp; 국토교통부 고시 제2025-738호 &nbsp;·&nbsp; MANMIN Ver-5.0</div></div>
+    <div class="a4-hd-sub">건축물의 에너지절약설계기준 제6조 &nbsp;·&nbsp; 국토교통부 고시 제2025-738호 &nbsp;·&nbsp; MANMIN Ver-5.1</div></div>
   </div>
   <div class="a4-hd-r"><div class="a4-hd-date">작성일: ${projDate}</div><div class="a4-hd-law">2025.12.31 시행</div></div>
 </div>
@@ -1452,7 +1459,7 @@ ${[
   <!-- 2페이지 이후 각 섹션 상단에 간략 헤더 (인쇄 시 표시) -->
   <div class="a4-pg-hd" style="${idx===0?'margin-top:8pt;':''}">
     <div class="a4-pg-hd-title">에너지성능지표(EPI) 검토서 — ${projName}</div>
-    <div class="a4-pg-hd-right">MANMIN Ver-5.0 &nbsp;|&nbsp; ${projDate}</div>
+    <div class="a4-pg-hd-right">MANMIN Ver-5.1 &nbsp;|&nbsp; ${projDate}</div>
   </div>
   <div class="a4-sec-title" style="border-left-color:${catC[cat]};color:${catC[cat]}">${title}&nbsp;&nbsp;(${sc[cat]}/${CAT_INFO[cat].max}점)</div>
   <table class="a4-tbl">
@@ -1473,7 +1480,7 @@ ${[
 </div>`).join('')}
 <div class="a4-footer">
   <div class="a4-footer-note">※ 국토교통부 고시 제2025-738호 기준으로 산정되었습니다.<br>※ 연면적 기준에 따라 목표점수 및 의무항목이 적용됩니다. 실제 허가 제출 시 설계도서와 일치 여부를 반드시 확인하십시오.</div>
-  <div class="a4-footer-brand">MANMIN Ver-5.0</div>
+  <div class="a4-footer-brand">MANMIN Ver-5.1</div>
 </div>`;
 }
 
@@ -1709,7 +1716,7 @@ window.exportA4Jpg=function(){
   markLongTables(el); var segs=mmSegments(el), fullH=Math.max(mmContentHeight(el),1);
   html2canvas(el,{scale:2,useCORS:true,allowTaint:false,backgroundColor:'#ffffff',logging:false,width:el.scrollWidth,height:fullH,windowWidth:el.scrollWidth,windowHeight:fullH,scrollX:0,scrollY:0}).then(function(canvas){
     restoreScale(); var now=new Date(), ts=now.getFullYear()+''+String(now.getMonth()+1).padStart(2,'0')+String(now.getDate()).padStart(2,'0')+'_'+String(now.getHours()).padStart(2,'0')+String(now.getMinutes()).padStart(2,'0');
-    var base='성능지표_EPI_검토서_MANMIN-Ver5.0_'+ts;
+    var base='성능지표_EPI_검토서_MANMIN-Ver5.1_'+ts;
     if(!segs||!segs.length){ mmDownload(canvas.toDataURL('image/jpeg',0.95), base+'.jpg'); mmToast('✅ JPG 저장 완료!'); return; }
     var S=canvas.width/el.scrollWidth, PAGE_W=MM_PAGE.W, PAGE_H=MM_PAGE.H, mmPerPx=210/PAGE_W, topPx=MM_PAGE.MT/mmPerPx;
     var shots=segs.map(function(sg,idx){ var h=Math.max(1,Math.round((sg[1]-sg[0])*S)); var tmp=document.createElement('canvas'); tmp.width=Math.round(PAGE_W*S); tmp.height=Math.round(PAGE_H*S); var ctx=tmp.getContext('2d'); ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,tmp.width,tmp.height); ctx.drawImage(canvas,0,Math.round(sg[0]*S),canvas.width,h,0,Math.round(topPx*S),canvas.width,h); if(segs.length>1){ var fs=Math.round(9*S); ctx.fillStyle='#9CA3AF'; ctx.font='700 '+fs+'px Orbitron, "JetBrains Mono", monospace'; ctx.textAlign='left'; ctx.textBaseline='alphabetic'; ctx.fillText((idx+1)+' / '+segs.length, Math.round(MM_PAGE.ML/mmPerPx*S), Math.round((MM_PAGE.H-MM_PAGE.MB/mmPerPx+fs/S*0.4)*S)); } return tmp.toDataURL('image/jpeg',0.95); });
