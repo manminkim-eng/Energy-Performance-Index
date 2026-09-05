@@ -138,8 +138,7 @@ input[type="number"]{-moz-appearance:textfield;}
   white-space:nowrap;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
 .tb:hover{color:#fff;background:rgba(255,255,255,.09);}
 .tb.active{color:#fff;background:#15803d;border-bottom-color:#86efac;}
-.tb.tb-win{color:#bfdbfe;margin-left:auto;}
-.tb.tb-win:hover{color:#fff;background:rgba(59,130,246,.28);}
+/* v5.4.1 — 별지서식 산정서 탭 버튼: 다른 탭과 동일 디자인 · A4 검토서 바로 옆 */
 /* v5.4 — 별지서식 산정서 별도창 (?view=formal) */
 #mm-formal-winbar{display:none;position:sticky;top:0;z-index:60;background:#1e3a5f;color:#fff;padding:9px 16px;align-items:center;gap:10px;flex-wrap:wrap;box-shadow:0 2px 8px rgba(0,0,0,.25);}
 #mm-formal-winbar .wb-tit{font-weight:900;font-size:13px;letter-spacing:.03em;flex:1;min-width:200px;}
@@ -876,7 +875,7 @@ body.mm-print-tab .score-panel{display:none;}   /* A4 탭에서는 모바일 하
       <button class="tb active" onclick="goTab('main',this)">⌨️ EPI 점수 산정</button>
       <button class="tb" onclick="goTab('formal',this)">📑 정식 산정 (별지서식)</button>
       <button class="tb" onclick="goTab('print',this)">📄 A4 검토서</button>
-      <button class="tb tb-win" onclick="openFormalWin()" title="에너지성능지표(EPI) 산정서 — 별지 제1호서식을 새 창에서 열기 (인쇄·PDF)">🗗 별지서식 산정서 ↗</button>
+      <button class="tb tb-win" onclick="openFormalWin()" title="에너지성능지표(EPI) 산정서 — 별지 제1호서식을 새 창에서 열기 (인쇄·PDF)">📑 별지서식 산정서</button>
     </div>
   </nav>
 </header>
