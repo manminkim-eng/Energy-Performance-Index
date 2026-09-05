@@ -139,6 +139,8 @@ input[type="number"]{-moz-appearance:textfield;}
 .tb:hover{color:#fff;background:rgba(255,255,255,.09);}
 .tb.active{color:#fff;background:#15803d;border-bottom-color:#86efac;}
 /* v5.4.1 — 별지서식 산정서 탭 버튼: 다른 탭과 동일 디자인 · A4 검토서 바로 옆 */
+/* v5.4.2 — 별도창 A4 시트 좌우 여백 대칭 */
+body.mm-formal-win .f6-rpt-outer{padding:16px 0 20px;}
 /* v5.4 — 별지서식 산정서 별도창 (?view=formal) */
 #mm-formal-winbar{display:none;position:sticky;top:0;z-index:60;background:#1e3a5f;color:#fff;padding:9px 16px;align-items:center;gap:10px;flex-wrap:wrap;box-shadow:0 2px 8px rgba(0,0,0,.25);}
 #mm-formal-winbar .wb-tit{font-weight:900;font-size:13px;letter-spacing:.03em;flex:1;min-width:200px;}
@@ -2436,7 +2438,7 @@ function App(){
       if(!outer||!inner)return;
       const A4W=794, outerW=outer.clientWidth;
       const scale=Math.min(1,(outerW-16)/A4W);
-      const scaledW=A4W*scale, offset=scale<1?0:(outerW-scaledW)/2;
+      const scaledW=A4W*scale, offset=Math.max(0,(outerW-scaledW)/2);   /* v5.4.2 — 모바일도 중앙 정렬(종전 offset 0 → 좌측 쏠림) */
       inner.style.transformOrigin="top left";
       inner.style.transform=`translateX(${offset}px) scale(${scale})`;
       outer.style.height=(inner.scrollHeight*scale+40)+"px";

@@ -45,3 +45,10 @@
 | 팝업 차단 | — | `window.open` 실패 시 토스트 후 정식 산정 탭으로 폴백 |
 | PDF 파일명 | — | 별도창 document.title = `EPI_산정서_별지1호서식_공사명_YYYYMMDD` |
 | sw.js | epi-v5.3.0 | epi-v5.4.0 |
+
+## v5.4.2 (2026-09-06) — 별지서식 산정서 미리보기 좌측 쏠림 정정
+| 항목 | 기존 | 변경 |
+|---|---|---|
+| A4 시트 정렬(모바일·별도창) | `offset = scale<1 ? 0 : 중앙` → 축소 시 좌측 0px, 우측 16px 여백(쏠림) | `offset = max(0,(outerW−scaledW)/2)` — 전 폭 중앙 정렬(좌우 8px) |
+| 별도창 outer 여백 | 20px 0 | 16px 0 20px |
+| sw.js | epi-v5.4.0 | epi-v5.4.1 |
