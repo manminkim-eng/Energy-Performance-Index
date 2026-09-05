@@ -2293,7 +2293,7 @@ function App(){
   useEffect(()=>{
     function pull(){
       try{
-        const st=window.state; if(!st) return;
+        const st=(typeof state!=='undefined')?state:window.state; if(!st) return;
         const area=+st.floorArea||0;
         const cls=st.bldType==='residential'?'H1':(area>=3000?'L':'S');
         setCfg(p=>({...p,region:REGIONS.includes(st.region)?st.region:p.region,area,pub:st.orgType==='public',cls:(p.cls==='H2'&&cls==='H1')?'H2':cls}));
