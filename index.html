@@ -138,6 +138,8 @@ input[type="number"]{-moz-appearance:textfield;}
   white-space:nowrap;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
 .tb:hover{color:#fff;background:rgba(255,255,255,.09);}
 .tb.active{color:#fff;background:#15803d;border-bottom-color:#86efac;}
+/* v5.4.3 — 사용자 매뉴얼 링크: 탭 막대 오른쪽 끝 · 고정 URL(설치앱·로컬 사본에서도 공개 매뉴얼로) */
+.tb.tb-manual{margin-left:auto;text-decoration:none;}
 /* v5.4.1 — 별지서식 산정서 탭 버튼: 다른 탭과 동일 디자인 · A4 검토서 바로 옆 */
 /* v5.4.2 — 별도창 A4 시트 좌우 여백 대칭 */
 body.mm-formal-win .f6-rpt-outer{padding:16px 0 20px;}
@@ -878,6 +880,7 @@ body.mm-print-tab .score-panel{display:none;}   /* A4 탭에서는 모바일 하
       <button class="tb" onclick="goTab('formal',this)">📑 정식 산정 (별지서식)</button>
       <button class="tb" onclick="goTab('print',this)">📄 A4 검토서</button>
       <button class="tb tb-win" onclick="openFormalWin()" title="에너지성능지표(EPI) 산정서 — 별지 제1호서식을 새 창에서 열기 (인쇄·PDF)">📑 별지서식 산정서</button>
+      <a class="tb tb-manual" href="https://manminkim-eng.github.io/Energy-Performance-Index/manual/" target="_blank" rel="noopener" onclick="return mmOpenManual(event)" title="사용자 매뉴얼 — 새 창(온라인)">📘 매뉴얼</a>
     </div>
   </nav>
 </header>
@@ -1802,6 +1805,8 @@ function mmToast(msg){ var el=document.getElementById('mm-toast'); if(!el) retur
 window.MM_FORMAL_WIN=/[?&]view=formal(?:&|$)/.test(location.search);
 window.MM_SNAP_KEY='epi54_formal_snap';
 if(window.MM_FORMAL_WIN){ document.body.classList.add('mm-formal-win','mm-formal-tab','mm-print-tab'); }
+/* v5.4.3 — 사용자 매뉴얼: 온라인일 때만 새 창(매뉴얼은 프리캐시 대상이 아님 — 오프라인에서 앱 화면이 대신 열리는 것 방지) */
+function mmOpenManual(e){ if(navigator.onLine===false){ if(e) e.preventDefault(); mmToast('📘 매뉴얼은 인터넷 연결 시 열립니다'); return false; } return true; }
 window.openFormalWin=function(){
   try{ window.dispatchEvent(new Event('mm-formal-open')); }catch(e){}   /* v5 입력값 → 정식 산정 동기화 → 스냅샷 저장 */
   var url=location.pathname+'?view=formal';

@@ -52,3 +52,15 @@
 | A4 시트 정렬(모바일·별도창) | `offset = scale<1 ? 0 : 중앙` → 축소 시 좌측 0px, 우측 16px 여백(쏠림) | `offset = max(0,(outerW−scaledW)/2)` — 전 폭 중앙 정렬(좌우 8px) |
 | 별도창 outer 여백 | 20px 0 | 16px 0 20px |
 | sw.js | epi-v5.4.0 | epi-v5.4.1 |
+
+## v5.4.3 (2026-10-10) — 사용자 매뉴얼 연결
+| 항목 | 위치 | 기존 | 변경 |
+|---|---|---|---|
+| 매뉴얼 링크 | 탭 막대 `.tab-bar-inner` (별지서식 산정서 다음) | — | `<a class="tb tb-manual" href="https://manminkim-eng.github.io/Energy-Performance-Index/manual/" target="_blank">📘 매뉴얼</a>` — 오른쪽 끝 정렬, 고정 URL(설치앱·로컬 사본에서도 공개 매뉴얼로). 헤더 버튼 0개 규격(§18-1) 유지 |
+| `mmOpenManual(e)` | 스크립트(`openFormalWin` 앞) | — | 오프라인이면 이동 차단 + 토스트 「📘 매뉴얼은 인터넷 연결 시 열립니다」 |
+| CSS | `.tb.tb-manual` 신설 | — | `margin-left:auto; text-decoration:none` |
+| 사용자 매뉴얼 | `manual/` 신설 | — | `index.html`(목차·그림 14장·번호 배지·기술기준 해설·FAQ) · `images/`(WebP·`_marks.json`) · `assets/fonts/` · `EPI_사용자매뉴얼_Ver-5.4.pdf`(A4 31쪽) · `_tools/`(재캡처·재생성 도구) |
+| sw.js | CACHE | epi-v5.4.1 | epi-v5.4.2 (index.html 변경 한 쌍) |
+| 화면 버전 표기 | 헤더·제목 | Ver-5.4 | **Ver-5.4 유지** — 매뉴얼 판 = 화면 표기 Ver-5.4 |
+
+계산 로직 변경 없음(index.html 변경 4행: CSS 2 · 탭 링크 1 · 함수 1 + 주석). 매뉴얼 4장 조문은 「건축물의 에너지절약설계기준」 국토교통부고시 제2026-360호(2026.7.8. 시행) 제6조·제15조·별지 제1호서식을 LawMCP 원문으로 대조(2026-10-10).

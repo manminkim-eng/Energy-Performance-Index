@@ -19,7 +19,7 @@ const mmMatch = (req, opt) => caches.keys()
   .then((ks) => ks.reduce((p, k) => p.then((r) => r || caches.open(k).then((c) => c.match(req, opt))), Promise.resolve(undefined)))
   .then((r) => (r && r.type === 'opaque' && req && req.mode === 'cors') ? undefined : r);
 
-const CACHE  = 'epi-v5.4.1';
+const CACHE  = 'epi-v5.4.2';   /* v5.4.3 (2026-10-10) — 사용자 매뉴얼 링크(index.html 변경 한 쌍) */
 const ORPHAN = ['epi-v3-0'];
 const ASSETS = [
   './', './index.html', './manifest.json',

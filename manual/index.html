@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="ko"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EPI 에너지성능지표 산정기 사용자 매뉴얼 Ver-5.4</title>
+<meta name="description" content="EPI 에너지성능지표 산정기 Ver-5.4 사용자 매뉴얼 — 화면 기능, 기술기준(에너지절약설계기준 제15조·별지 제1호서식), 실무 작업 방법">
+<meta name="author" content="김만민 건축사 · ㈜대성건축사사무소">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@700;900&display=swap">
+<link rel="stylesheet" href="./assets/fonts/manmin-fonts.css">
+<style>
+:root{
+  --navy:#2D3A8C;--navy-d:#1F2A6B;--navy-l:#E9ECF8;--accent:#F4A261;--accent-d:#C97A3A;--accent-l:#FDF1E7;
+  --bg:#F8F9FA;--card:#FFFFFF;--text:#1A1A2E;--text2:#4A4F66;--line:#DDE1EA;--ok:#0F766E;--ng:#B42318;
+  --r:12px;--pad:24px;--shadow:0 4px 20px rgba(0,0,0,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-sans);font-size:16px;line-height:1.75;word-break:keep-all;overflow-wrap:anywhere}
+a{color:var(--navy)}a:hover{color:var(--accent-d)}
+code,kbd,.mono{font-family:var(--font-mono);font-size:.9em}
+code{background:var(--navy-l);color:var(--navy-d);padding:1px 6px;border-radius:5px}
+kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 6px;background:#fff}
+/* 상단 */
+.top{background:linear-gradient(135deg,var(--navy-d),var(--navy));color:#fff}
+.top-in{max-width:1240px;margin:0 auto;padding:44px 24px 36px}
+.eyebrow{font-family:var(--font-brand);font-weight:700;font-size:12px;letter-spacing:.18em;opacity:.85}
+.top h1{font-size:28px;font-weight:900;margin:8px 0 6px;line-height:1.35}
+.top .sub{opacity:.9;margin:0}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:4px 12px;font-size:13px}
+a.badge{color:#fff;text-decoration:none}a.badge:hover{background:rgba(255,255,255,.24);color:#fff}
+.badge.acc{background:var(--accent);border-color:var(--accent);color:#1A1A2E;font-weight:700}
+/* 레이아웃 */
+.wrap{max-width:1240px;margin:0 auto;padding:28px 24px 80px;display:grid;grid-template-columns:260px minmax(0,1fr);gap:32px}
+nav.toc{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow:auto;background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:18px 16px;font-size:14px}
+nav.toc h2{font-size:13px;letter-spacing:.12em;color:var(--text2);margin:0 0 8px}
+nav.toc ol{list-style:none;margin:0;padding:0}
+nav.toc li a{display:block;padding:5px 8px;border-radius:8px;text-decoration:none;color:var(--text)}
+nav.toc li a:hover,nav.toc li a.on{background:var(--navy-l);color:var(--navy)}
+nav.toc li.sub a{padding-left:20px;font-size:13px;color:var(--text2)}
+main{min-width:0}
+section.ch{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:var(--pad) calc(var(--pad) + 8px);margin-bottom:28px}
+section.ch>h2{font-size:24px;font-weight:700;color:var(--navy);margin:0 0 4px;display:flex;align-items:baseline;gap:10px}
+section.ch>h2 .n{font-family:var(--font-brand);font-weight:700;font-size:14px;color:#fff;background:var(--navy);border-radius:8px;padding:2px 9px}
+section.ch>.lead{color:var(--text2);margin:0 0 18px}
+h3{font-size:19px;color:var(--navy-d);margin:34px 0 10px;padding-top:6px;border-top:1px solid var(--line)}
+h3:first-of-type{border-top:0}
+h4{font-size:16px;margin:22px 0 8px}
+p{margin:8px 0}
+ul,ol{padding-left:22px}
+.note,.tip,.warn{border-radius:10px;padding:12px 16px;margin:14px 0;font-size:15px}
+.note{background:var(--navy-l);border-left:4px solid var(--navy)}
+.tip{background:var(--accent-l);border-left:4px solid var(--accent)}
+.warn{background:#FEF3F2;border-left:4px solid var(--ng)}
+.note b:first-child,.tip b:first-child,.warn b:first-child{margin-right:6px}
+/* 표 */
+.tbl{overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14px;background:#fff}
+th,td{border-bottom:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--navy-l);color:var(--navy-d);font-weight:700;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-family:var(--font-mono);white-space:nowrap}
+.ok{color:var(--ok);font-weight:700}.ng{color:var(--ng);font-weight:700}
+/* 그림 */
+figure.shot{margin:18px 0 26px}
+figure.shot .frame{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;cursor:zoom-in}
+figure.shot img{display:block;width:100%;height:auto}
+figure.narrow{max-width:420px}
+.pin{position:absolute;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;background:var(--accent);color:#1A1A2E;font:700 13px/26px var(--font-mono);text-align:center;box-shadow:0 0 0 3px #fff,0 2px 8px rgba(0,0,0,.35);pointer-events:none}
+figcaption{font-size:14px;color:var(--text2);margin-top:8px}
+.fno{font-family:var(--font-mono);font-size:11px;background:var(--navy);color:#fff;border-radius:6px;padding:1px 7px;margin-right:8px}
+ol.legend{list-style:none;padding:0;margin:10px 0 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px 16px;font-size:14px}
+ol.legend li{display:flex;gap:8px;align-items:flex-start}
+ol.legend b{flex:0 0 22px;height:22px;border-radius:50%;background:var(--accent);font:700 12px/22px var(--font-mono);text-align:center}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+/* 단계 */
+.steps{counter-reset:st;list-style:none;padding:0;margin:16px 0}
+.steps>li{counter-increment:st;position:relative;padding:4px 0 18px 54px;border-left:2px solid var(--line);margin-left:18px}
+.steps>li:last-child{border-left-color:transparent}
+.steps>li::before{content:counter(st);position:absolute;left:-19px;top:0;width:36px;height:36px;border-radius:50%;background:var(--navy);color:#fff;font:700 15px/36px var(--font-mono);text-align:center;box-shadow:0 0 0 4px var(--bg)}
+.steps>li>b.t{display:block;font-size:17px;color:var(--navy-d);margin-bottom:2px}
+/* 수식 */
+.eq{font-family:var(--font-mono);background:#0F1630;color:#E8ECFF;border-radius:10px;padding:14px 18px;margin:12px 0;overflow-x:auto;font-size:14px;line-height:1.9;white-space:pre}
+.eq .c{color:#9AA6D6}
+.svgbox{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px;margin:14px 0;overflow-x:auto}
+.svgbox svg{display:block;width:100%;min-width:640px;height:auto}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin:14px 0}
+.card{border:1px solid var(--line);border-radius:var(--r);padding:16px;background:#fff}
+.card h5{margin:0 0 4px;font-size:15px;color:var(--navy)}
+.card p{margin:0;font-size:14px;color:var(--text2)}
+footer.foot{max-width:1240px;margin:0 auto;padding:0 24px 40px;color:var(--text2);font-size:13px}
+/* 라이트박스 */
+#lb{position:fixed;inset:0;background:rgba(10,14,30,.88);display:none;align-items:center;justify-content:center;z-index:99;cursor:zoom-out;padding:16px}
+#lb.open{display:flex}#lb img{max-width:100%;max-height:100%;border-radius:8px;background:#fff}
+.totop{position:fixed;right:18px;bottom:18px;width:44px;height:44px;border-radius:50%;background:var(--navy);color:#fff;border:0;font-size:18px;box-shadow:var(--shadow);cursor:pointer}
+/* 반응형 5단계 */
+@media (max-width:1240px){.wrap{grid-template-columns:230px minmax(0,1fr);gap:24px}}
+@media (max-width:1024px){.wrap{grid-template-columns:1fr}nav.toc{position:static;max-height:none}nav.toc ol{columns:2}}
+@media (max-width:760px){.pair{grid-template-columns:1fr}section.ch{padding:20px 18px}.top h1{font-size:24px}}
+@media (max-width:640px){nav.toc ol{columns:1}body{font-size:15px}}
+@media (max-width:480px){.wrap,.top-in{padding-left:16px;padding-right:16px}.pin{width:22px;height:22px;font-size:11px;line-height:22px}}
+@media (max-width:400px){section.ch>h2{font-size:20px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+/* A4 인쇄 */
+@page{size:A4;margin:14mm 12mm 14mm}
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff;font-size:10.5pt}
+  nav.toc,.totop,#lb{display:none!important}
+  .wrap{display:block;padding:0}
+  section.ch{box-shadow:none;padding:0 0 8mm;margin:0;break-before:page}
+  main{padding-bottom:8mm}
+  section.ch:first-of-type{break-before:auto}
+  figure.shot,.tbl,.eq,.svgbox,.note,.tip,.warn,.steps>li{break-inside:avoid}
+  h3,h4{break-after:avoid}
+  .top{border-radius:0}
+  .pfoot{position:fixed;bottom:0;left:0;right:0;height:6mm;background:#fff;font-size:8pt;color:#666;border-top:1px solid #ccc;padding-top:1.5mm;display:flex;justify-content:space-between}
+}
+.pfoot{display:none}
+@media print{.pfoot{display:flex}}
+</style>
+</head><body>
+<header class="top"><div class="top-in">
+<div class="eyebrow">ENERGY PERFORMANCE INDEX · USER MANUAL</div>
+<h1>EPI 에너지성능지표 산정기 사용자 매뉴얼</h1>
+<p class="sub">웹 기능 · 기술기준 · 작업 방법 — 건축·설비 기술자용 안내서</p>
+<div class="badges"><span class="badge acc">매뉴얼 <span style="font-family:var(--font-brand)">Ver-5.4</span></span><a class="badge" href="../index.html">▶ EPI 산정기 열기</a><a class="badge" href="EPI_사용자매뉴얼_Ver-5.4.pdf" download>⤓ PDF</a><span class="badge">2026-10-10</span><span class="badge">김만민 건축사 · ㈜대성건축사사무소</span></div>
+</div></header>
+<div class="wrap"><nav class="toc" aria-label="목차"><h2>목차</h2><ol><li><a href="#ch0">0. 이 매뉴얼에 대하여</a></li><li><a href="#ch1">1. EPI 산정기 한눈에 보기</a></li><li class="sub"><a href="#s1-1">화면 구성</a></li><li class="sub"><a href="#s1-2">작업 탭·근거 표시</a></li><li class="sub"><a href="#s1-3">설치·보관·매뉴얼</a></li><li><a href="#ch2">2. 5분 따라하기</a></li><li><a href="#ch3">3. 탭별 기능 상세</a></li><li class="sub"><a href="#s3-1">공사 정보·기본 설정</a></li><li class="sub"><a href="#s3-2">부문별 항목 체크</a></li><li class="sub"><a href="#s3-3">EPI 총점 패널</a></li><li class="sub"><a href="#s3-4">정식 산정 — 기본 조건</a></li><li class="sub"><a href="#s3-5">정식 산정 — 결과·의무</a></li><li class="sub"><a href="#s3-6">정식 산정 — 배점 선택</a></li><li class="sub"><a href="#s3-7">A4 검토서·출력</a></li><li class="sub"><a href="#s3-8">별지서식 산정서 창</a></li><li class="sub"><a href="#s3-9">이용안내·초기화</a></li><li class="sub"><a href="#s3-10">모바일</a></li><li><a href="#ch4">4. 기술기준 해설</a></li><li class="sub"><a href="#s4-1">EPI 판정 기준</a></li><li class="sub"><a href="#s4-2">평점 산식 a×b</a></li><li class="sub"><a href="#s4-3">의무사항</a></li><li class="sub"><a href="#s4-4">약식과 정식의 관계</a></li><li><a href="#ch5">5. 실무 작업 방법</a></li><li class="sub"><a href="#s5-1">설계 단계별 절차</a></li><li class="sub"><a href="#s5-2">제출 전 확인</a></li><li class="sub"><a href="#s5-3">예제 결과</a></li><li><a href="#ch6">6. 문제 해결·FAQ</a></li><li><a href="#ch7">부록</a></li><li class="sub"><a href="#a1">예제 입력값</a></li><li class="sub"><a href="#a2">버전 변경 내역</a></li><li class="sub"><a href="#a3">용어</a></li></ol></nav><main><section class="ch" id="ch0"><h2><span class="n">00</span>이 매뉴얼에 대하여</h2>
+<p class="lead">EPI 에너지성능지표 산정기는 「건축물의 에너지절약설계기준」 에너지성능지표(EPI)를 약식 체크리스트와 정식 별지 제1호서식 두 방식으로 산정하고, A4 검토서·산정서로 출력하는 웹 계산도구입니다. 처음 쓰는 건축·설비 기술자가 화면 순서대로 따라 하며 점수와 의무사항을 검토할 수 있도록 작성했습니다.</p>
+<div class="tbl"><table><thead><tr><th class="">항목</th><th class="">내용</th></tr></thead><tbody><tr><td class="">대상 프로그램</td><td class="">EPI 에너지성능지표 산정기 <b>Ver-5.4</b> — 탭 막대 「📘 매뉴얼」 버튼으로 이 문서가 열립니다</td></tr><tr><td class="">접속 주소</td><td class=""><a href="https://manminkim-eng.github.io/Energy-Performance-Index/" target="_blank" rel="noopener">manminkim-eng.github.io/Energy-Performance-Index</a></td></tr><tr><td class="">매뉴얼 판</td><td class=""><b>Ver-5.4</b> (화면 표기와 같은 판 번호, 초판) · 2026-10-10 · 작성 김만민 건축사(㈜대성건축사사무소)</td></tr><tr><td class="">내려받기</td><td class=""><a href="EPI_사용자매뉴얼_Ver-5.4.pdf" download>PDF(A4)</a> · <a href="../index.html">EPI 산정기 열기</a></td></tr><tr><td class="">예제</td><td class="">본문 그림은 모두 같은 예제(만민 건축사 신사옥 신축공사 · 비주거 · 중부2지역 · 민간 · 연면적 3,500㎡)로 캡처 — 입력값은 <a href="#a1">부록 A1</a></td></tr><tr><td class="">근거 기준</td><td class="">「건축물의 에너지절약설계기준」 국토교통부고시 제2026-360호(2026.7.8. 시행) — 4장 조문은 법령 원문(LawMCP, 2026-10-10 조회)으로 대조</td></tr><tr><td class="">읽는 순서</td><td class="">처음이면 1장 → 2장(따라하기) → 필요할 때 3장(탭별 상세). 허가 제출 전에는 4장(기술기준)·5장(작업 방법)</td></tr></tbody></table></div>
+<div class="note"><b>표기</b>그림 위 주황색 번호(①②…)는 그림 아래 범례 번호와 같습니다. 그림을 누르면 크게 볼 수 있습니다. 버튼 이름은 「별지서식 산정서 출력」처럼 낫표로, 입력란은 <code>floorArea</code>처럼 화면 요소 ID를 함께 적었습니다.</div>
+<div class="warn"><b>책임 한계</b>본 도구는 에너지절약계획서 작성 보조 프로그램입니다. 각 항목 배점은 설계도면·자료로 판정되며(제15조②), 최종 적합 여부는 허가권자가 확인합니다. 「EPI 점수 산정」 탭의 약식 점수는 설계 전략 검토용이며 제출 서식의 평점이 아닙니다.</div>
+</section>
+<section class="ch" id="ch1"><h2><span class="n">01</span>EPI 산정기 한눈에 보기</h2>
+<p class="lead">설치 없이 브라우저에서 바로 실행되는 단일 페이지 앱(PWA)입니다. 입력은 내 PC 브라우저 안에서만 처리되며 서버로 전송되지 않습니다.</p>
+<div class="cards">
+<div class="card"><h5>무엇을 산정하나</h5><p>에너지성능지표(EPI) 평점 합계와 목표점(65·74점) 적합 여부, 연면적·기관·공조방식에 따른 의무사항 충족 여부</p></div>
+<div class="card"><h5>두 가지 방식</h5><p>약식 — 4부문 44항목 체크(100점 환산) · 정식 — 별지 제1호서식 42항목, 평점 = 기본배점 a × 배점 b</p></div>
+<div class="card"><h5>근거</h5><p>「건축물의 에너지절약설계기준」 제6조·제15조, 별지 제1호서식 (국토교통부고시 제2026-360호(2026.7.8. 시행))</p></div>
+<div class="card"><h5>출력</h5><p>약식 설계전략 검토서 · 별지 제1호서식 산정서(A4 인쇄·PDF) · JPG 저장</p></div>
+</div>
+<div class="svgbox"><svg viewBox="0 0 900 190" role="img" aria-label="EPI 작업 흐름: 공사 정보와 기본 설정을 입력하고, 약식 체크리스트로 설계 전략을 세운 뒤, 정식 산정에서 배점을 확정하고 별지서식 산정서를 출력한다">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2D3A8C"/></marker></defs>
+<style>.b{fill:#E9ECF8;stroke:#2D3A8C;stroke-width:1.5}.o{fill:#FDF1E7;stroke:#C97A3A;stroke-width:1.5}.t{font:600 14px 'Noto Sans KR','Noto Sans KR Local',sans-serif;fill:#1A1A2E}.s{font:12px 'Noto Sans KR','Noto Sans KR Local',sans-serif;fill:#4A4F66}.l{stroke:#2D3A8C;stroke-width:1.6;fill:none;marker-end:url(#ar)}</style>
+<rect class="b" x="10" y="45" width="190" height="100" rx="10"/><text class="t" x="26" y="78">① 공사 정보·기본 설정</text><text class="s" x="26" y="102">용도·기후대·기관·연면적</text><text class="s" x="26" y="122">→ 목표점·의무항목 결정</text>
+<rect class="b" x="240" y="45" width="190" height="100" rx="10"/><text class="t" x="256" y="78">② 약식 체크리스트</text><text class="s" x="256" y="102">EPI 점수 산정 탭</text><text class="s" x="256" y="122">설계 전략 검토(100점)</text>
+<rect class="o" x="470" y="45" width="190" height="100" rx="10"/><text class="t" x="486" y="78">③ 정식 산정</text><text class="s" x="486" y="102">별지 제1호서식 42항목</text><text class="s" x="486" y="122">평점 = 기본배점 a × 배점 b</text>
+<rect class="b" x="700" y="45" width="190" height="100" rx="10"/><text class="t" x="716" y="78">④ 출력</text><text class="s" x="716" y="102">약식 검토서 · 별지서식</text><text class="s" x="716" y="122">산정서 · PDF · JPG</text>
+<path class="l" d="M200,95 L238,95"/><path class="l" d="M430,95 L468,95"/><path class="l" d="M660,95 L698,95"/>
+<text class="s" x="246" y="172">계획설계 단계</text><text class="s" x="476" y="172">기본·실시설계 · 허가 제출</text>
+</svg></div>
+<h3 id="s1-1">1-1. 화면 구성</h3>
+<figure class="shot" id="fig-s01_overview"><div class="frame"><img src="images/s01_overview.webp" width="1440" height="900" loading="lazy" alt="전체 화면 — EPI 점수 산정 탭"><span class="pin" style="left:5.26%;top:13.49%">1</span><span class="pin" style="left:5.26%;top:19.93%">2</span><span class="pin" style="left:6.93%;top:27.58%">3</span><span class="pin" style="left:32.41%;top:35.71%">4</span><span class="pin" style="left:32.41%;top:53.60%">5</span><span class="pin" style="left:31.30%;top:90.19%">6</span><span class="pin" style="left:94.15%;top:81.76%">7</span></div><figcaption><span class="fno">S01</span>전체 화면 — EPI 점수 산정 탭</figcaption><ol class="legend"><li><b>1</b><span>작업 탭: 점수 산정 · 정식 산정 · A4 검토서 · 별지서식 산정서(새 창) · 매뉴얼</span></li><li><b>2</b><span>요약 스트립: 용도·지역·구분·목표·점수·판정이 입력할 때마다 갱신</span></li><li><b>3</b><span>EPI 총점 패널: 점수 링·판정·부문별 점수·의무항목 현황</span></li><li><b>4</b><span>공사 정보: 공사명·작성자·작성일(A4 표제에 표시)</span></li><li><b>5</b><span>기본 설정: 용도·기후대·기관·연면적 → 목표점과 의무항목 결정</span></li><li><b>6</b><span>부문 탭: 단열·외피 / 기계설비 / 전기설비 / 신재생에너지</span></li><li><b>7</b><span>이용안내·초기화 버튼(화면 오른쪽)</span></li></ol></figure>
+<div class="tbl"><table><thead><tr><th class="">탭</th><th class="">하는 일</th><th class="">본문</th></tr></thead><tbody><tr><td class="">⌨️ EPI 점수 산정</td><td class="">공사 정보·기본 설정 입력, 4부문 약식 체크리스트로 설계 전략 검토</td><td class="">3-1~3-3</td></tr><tr><td class="">📑 정식 산정 (별지서식)</td><td class="">별지 제1호서식 42항목 배점 b 선택 → 평점 a×b · 의무사항 자동 판정</td><td class="">3-4~3-6</td></tr><tr><td class="">📄 A4 검토서</td><td class="">약식 검토서 미리보기 · 약식/별지서식 인쇄 · JPG 저장</td><td class="">3-7</td></tr><tr><td class="">📑 별지서식 산정서</td><td class="">별지 제1호서식 산정서를 새 창으로 열어 인쇄·PDF</td><td class="">3-8</td></tr><tr><td class="">📘 매뉴얼</td><td class="">이 사용자 매뉴얼을 새 창으로 열기(인터넷 연결 필요)</td><td class="">1-3</td></tr></tbody></table></div>
+<h3 id="s1-2">1-2. 작업 탭·근거 표시</h3>
+<figure class="shot" id="fig-s02_tabs"><div class="frame"><img src="images/s02_tabs.webp" width="1440" height="162" loading="lazy" alt="헤더 — 작업 탭과 근거 고시 표시"><span class="pin" style="left:6.93%;top:75.87%">1</span><span class="pin" style="left:15.87%;top:75.87%">2</span><span class="pin" style="left:27.41%;top:75.87%">3</span><span class="pin" style="left:34.92%;top:75.87%">4</span><span class="pin" style="left:87.74%;top:75.87%">5</span><span class="pin" style="left:75.66%;top:15.33%">6</span></div><figcaption><span class="fno">S02</span>헤더 — 작업 탭과 근거 고시 표시</figcaption><ol class="legend"><li><b>1</b><span>EPI 점수 산정</span></li><li><b>2</b><span>정식 산정(별지서식)</span></li><li><b>3</b><span>A4 검토서</span></li><li><b>4</b><span>별지서식 산정서 — 새 창</span></li><li><b>5</b><span>📘 매뉴얼 — 이 매뉴얼을 새 창으로(탭 막대 오른쪽 끝)</span></li><li><b>6</b><span>근거 고시·목표점·시행일 표시</span></li></ol></figure>
+<p>헤더 오른쪽에는 판정 근거인 제15조와 고시 번호, 목표점(65점 · 공공기관 신축 74점), 시행일이 표시됩니다. 고시가 개정되면 이 표시와 4장 내용을 함께 확인하십시오.</p>
+<h3 id="s1-3">1-3. 설치·보관·매뉴얼</h3>
+<ul>
+<li><b>앱 설치(PWA)</b> — 화면 하단 설치 배너의 「설치하기」 또는 Edge·Chrome 주소창의 설치 아이콘. 설치 후에는 오프라인에서도 실행됩니다.</li>
+<li><b>업데이트</b> — 새 버전이 배포되면 하단에 「지금 적용」 안내가 나옵니다. 헤더 부제의 버전 표기(<code>MANMIN · Ver-5.4</code>)로 확인합니다.</li>
+<li><b>입력값 보관</b> — 입력값을 파일로 저장·불러오는 기능은 없습니다. 새로고침하거나 창을 닫으면 체크·배점 선택이 초기화되므로, 결과는 A4 검토서·산정서를 <b>PDF 또는 JPG로 저장</b>해 보관하십시오. (브라우저에는 별지서식 별도창 동기화용 임시값만 남습니다.)</li>
+<li><b>매뉴얼</b> — 탭 막대 오른쪽 「📘 매뉴얼」 버튼을 누르면 이 문서가 새 창으로 열립니다. 주소: <a href="https://manminkim-eng.github.io/Energy-Performance-Index/manual/" target="_blank" rel="noopener">manminkim-eng.github.io/Energy-Performance-Index/manual/</a> — 매뉴얼은 오프라인 저장 대상이 아니어서 인터넷이 끊기면 안내만 표시됩니다.</li>
+</ul>
+</section>
+<section class="ch" id="ch2"><h2><span class="n">02</span>5분 따라하기</h2>
+<p class="lead">예제(비주거 3,500㎡ · 중부2지역 · 민간)로 약식 점수를 확인하고, 정식 산정 후 별지서식 산정서까지 출력합니다. 실제 프로젝트도 같은 순서입니다.</p>
+<ol class="steps">
+<li><b class="t">공사 정보 입력</b>「EPI 점수 산정」 탭 오른쪽 첫 카드에 공사명·작성자·작성일을 넣습니다. A4 검토서와 별지서식 산정서 표제에 그대로 들어갑니다. → <a href="#s3-1">3-1</a></li>
+<li><b class="t">기본 설정</b>건물 용도·기후대·기관 구분·연면적을 고릅니다. 목표점 배너에 <b>65점</b>(공공기관 74점)이, 아래에 해당하는 의무 안내가 표시됩니다. → <a href="#s3-1">3-1</a></li>
+<li><b class="t">부문별 항목 체크</b>부문 탭을 차례로 열어 설계에 반영한 항목을 누릅니다. 「의무 0.8점+」 배지가 붙은 항목부터 확인합니다. → <a href="#s3-2">3-2</a></li>
+<li><b class="t">약식 점수 확인</b>총점 패널에서 점수와 판정을 봅니다. 예제는 <b>67 / 100점 · 목표 달성</b>, 의무항목 5개가 모두 ✔입니다. → <a href="#s3-3">3-3</a></li>
+<li><b class="t">정식 산정 — 기본 조건</b>「정식 산정 (별지서식)」 탭을 엽니다. 지역·연면적·기관·공사 정보는 점수 산정 탭에서 자동으로 넘어오고, 기본배점 구분은 <b>비주거 대형(3,000㎡ 이상)</b>으로 잡힙니다. 중앙식 공조 등 조건을 체크합니다. → <a href="#s3-4">3-4</a></li>
+<li><b class="t">배점 b 선택</b>부문별 표에서 항목마다 설계값에 해당하는 배점(1.0~0.6점)을 고르면 평점(a×b)이 자동 계산됩니다. 예제는 <b>76.00점 · 적합</b>, 의무사항 <b>6/6 충족</b>입니다. → <a href="#s3-6">3-6</a></li>
+<li><b class="t">A4 검토서 확인</b>「A4 검토서」 탭에서 미리보기를 확인하고 「🖨️ 약식 검토서 출력」 또는 「🖼️ JPG 저장」. → <a href="#s3-7">3-7</a></li>
+<li><b class="t">별지서식 산정서 출력</b>「🖨️ 별지서식 산정서 출력」 또는 탭 막대 「📑 별지서식 산정서」(새 창)에서 인쇄·PDF로 저장합니다. → <a href="#s3-8">3-8</a></li>
+</ol>
+<div class="tip"><b>요령</b>약식 체크리스트는 계획 단계에서 어느 부문을 강화할지 정하는 데 쓰고, 제출용 점수는 정식 산정 탭 결과를 씁니다. 두 점수는 배점 체계가 달라 같지 않습니다(<a href="#s4-4">4-4</a>).</div>
+</section>
+<section class="ch" id="ch3"><h2><span class="n">03</span>탭별 기능 상세</h2>
+<p class="lead">각 탭의 입력란과 버튼, 판정 방식을 화면 순서대로 설명합니다.</p>
+<h3 id="s3-1">3-1. 공사 정보 · 기본 설정</h3>
+<figure class="shot" id="fig-s03_config"><div class="frame"><img src="images/s03_config.webp" width="934" height="550" loading="lazy" alt="공사 정보와 기본 설정 카드"><span class="pin" style="left:3.93%;top:14.61%">1</span><span class="pin" style="left:35.27%;top:14.61%">2</span><span class="pin" style="left:66.60%;top:14.61%">3</span><span class="pin" style="left:3.93%;top:43.87%">4</span><span class="pin" style="left:50.94%;top:43.87%">5</span><span class="pin" style="left:3.93%;top:56.23%">6</span><span class="pin" style="left:50.94%;top:56.23%">7</span><span class="pin" style="left:3.93%;top:64.59%">8</span></div><figcaption><span class="fno">S03</span>공사 정보와 기본 설정 카드</figcaption><ol class="legend"><li><b>1</b><span>공사명 <code>projName</code> — A4 표제·PDF 파일명</span></li><li><b>2</b><span>작성자 <code>projAuthor</code></span></li><li><b>3</b><span>작성일 <code>projDate</code></span></li><li><b>4</b><span>건물 용도 — 비주거 / 공동주택</span></li><li><b>5</b><span>기후대 — 중부1 · 중부2 · 남부 · 제주</span></li><li><b>6</b><span>기관 구분 — 민간 / 공공기관</span></li><li><b>7</b><span>연면적(㎡) <code>floorArea</code></span></li><li><b>8</b><span>목표점 배너 — 목표점과 적용 조건 요약</span></li></ol></figure>
+<div class="tbl"><table><thead><tr><th class="">조건</th><th class="">화면 반영</th><th class="">근거</th></tr></thead><tbody><tr><td class="">목표점</td><td class="">민간 65점 · 공공기관 74점</td><td class="">제15조①</td></tr><tr><td class="">연면적 500㎡ 이상</td><td class="">에너지절약계획서 제출 대상 안내</td><td class="">안내 문구</td></tr><tr><td class="">연면적 1,000㎡ 이상</td><td class="">건축 7번 0.6 · 기계 1·2번 0.8 · 전기 1번 0.8 · 신재생 4점 의무 표시</td><td class="">제15조③</td></tr><tr><td class="">중앙식 공조(1,000㎡ 이상)</td><td class="">기계 3번 0.8 · 6번 공기조화기 부착형 열회수형환기장치 · 9번 채택 안내</td><td class="">제15조④</td></tr><tr><td class="">공공기관 3,000㎡ 이상</td><td class="">기계 1·2번 0.9 · 전기 8번 0.6 의무 체크(업무·교육연구 용도 여부는 사용자 판단)</td><td class="">법 제14조의2</td></tr><tr><td class="">공공기관 10,000㎡ 이상</td><td class="">전기 8번(BEMS) 1.0점 의무 체크</td><td class="">별지 제1호서식 전기⑧</td></tr></tbody></table></div>
+<p>기본 설정 아래 녹색 칩은 선택한 기후대·용도에서 앱이 쓰는 <b>참고 열관류율</b>(외벽·지붕·창·바닥)입니다. 실제 판정은 설계도서의 평균 열관류율을 별표1 원문과 대조해 확인하십시오.</p>
+<h3 id="s3-2">3-2. 부문별 항목 체크</h3>
+<figure class="shot" id="fig-s04_items"><div class="frame"><img src="images/s04_items.webp" width="934" height="1327" loading="lazy" alt="단열·외피 부문 — 항목을 누르면 체크·해제"><span class="pin" style="left:2.22%;top:6.53%">1</span><span class="pin" style="left:3.93%;top:17.05%">2</span><span class="pin" style="left:91.28%;top:18.03%">3</span><span class="pin" style="left:26.23%;top:90.49%">4</span></div><figcaption><span class="fno">S04</span>단열·외피 부문 — 항목을 누르면 체크·해제</figcaption><ol class="legend"><li><b>1</b><span>부문 탭 — 탭 옆 숫자는 부문 점수</span></li><li><b>2</b><span>항목 카드 — 누르면 체크(녹색)</span></li><li><b>3</b><span>배점 배지(+2점 등)</span></li><li><b>4</b><span>의무 배지 — 현재 조건에서 의무인 항목</span></li></ol></figure>
+<figure class="shot" id="fig-s06_mech"><div class="frame"><img src="images/s06_mech.webp" width="934" height="1100" loading="lazy" alt="기계설비 부문 — 일부 항목은 체크하면 세부 선택이 열림"><span class="pin" style="left:16.14%;top:8.62%">1</span><span class="pin" style="left:3.93%;top:20.40%">2</span><span class="pin" style="left:3.93%;top:55.16%">3</span></div><figcaption><span class="fno">S06</span>기계설비 부문 — 일부 항목은 체크하면 세부 선택이 열림</figcaption><ol class="legend"><li><b>1</b><span>기계설비 탭</span></li><li><b>2</b><span>기계 1번 고효율 난방 — 의무 0.8점+</span></li><li><b>3</b><span>기계 6번 폐열회수형 환기장치</span></li></ol></figure>
+<div class="tbl"><table><thead><tr><th class="">부문</th><th class="">주요 항목</th><th class="">부문 만점</th></tr></thead><tbody><tr><td class="">단열·외피</td><td class="">외벽·창호·지붕·바닥 단열, 기밀, 외피 태양열 취득 저감(건축 7번) 등</td><td class="">40</td></tr><tr><td class="">기계설비</td><td class="">고효율 냉·난방(기계 1·2번), 송풍기(3번), 열회수환기(6번), 가변속(9번) 등</td><td class="">15</td></tr><tr><td class="">전기설비</td><td class="">조명밀도(전기 1번), 변압기·역률·대기전력·승강기, BEMS(전기 8번, 공공) 등</td><td class="">15</td></tr><tr><td class="">신재생에너지</td><td class="">태양광·태양열·지열·연료전지 등, 에너지 시뮬레이션·패시브 설계</td><td class="">30</td></tr></tbody></table></div>
+<div class="note"><b>약식 배점</b>항목 배지의 점수는 약식 체크리스트 고유 배점입니다. 부문 합은 만점에서 잘리며 총점은 100점 만점입니다. 제출 서식의 평점은 3-4~3-6의 정식 산정으로 구합니다.</div>
+<h3 id="s3-3">3-3. EPI 총점 패널</h3>
+<div class="pair">
+<figure class="shot narrow" id="fig-s05_score"><div class="frame"><img src="images/s05_score.webp" width="330" height="691" loading="lazy" alt="EPI 총점 패널(예제 67점)"><span class="pin" style="left:44.22%;top:17.59%">1</span><span class="pin" style="left:5.55%;top:34.95%">2</span><span class="pin" style="left:1.50%;top:44.24%">3</span><span class="pin" style="left:5.55%;top:77.53%">4</span></div><figcaption><span class="fno">S05</span>EPI 총점 패널(예제 67점)</figcaption><ol class="legend"><li><b>1</b><span>EPI 총점 / 100점 · 목표점</span></li><li><b>2</b><span>판정 — 목표 달성 여부</span></li><li><b>3</b><span>부문별 점수 / 만점</span></li><li><b>4</b><span>의무 항목 현황 — 충족 ✔ / 미충족 ✕</span></li></ol></figure>
+<div>
+<div class="tbl"><table><thead><tr><th class="">링 색</th><th class="">의미</th></tr></thead><tbody><tr><td class="">녹색</td><td class="">총점 ≥ 목표점</td></tr><tr><td class="">주황</td><td class="">목표점의 80% 이상 ~ 목표점 미만</td></tr><tr><td class="">빨강</td><td class="">목표점의 80% 미만</td></tr></tbody></table></div>
+<p>링의 짧은 주황 눈금은 목표점 위치입니다. 「27 / 44개 항목 적용」은 체크한 항목 수입니다. 의무 항목 현황은 연면적·기관 조건(3-1 표)에 따라 자동으로 늘거나 줄며, 하나라도 ✕이면 점수와 관계없이 보완이 필요합니다.</p>
+</div></div>
+<h3 id="s3-4">3-4. 정식 산정 — 기본 조건</h3>
+<figure class="shot" id="fig-s07_formal_top"><div class="frame"><img src="images/s07_formal_top.webp" width="1440" height="1200" loading="lazy" alt="정식 산정 탭 — 프로젝트 정보·기본 조건"><span class="pin" style="left:75.93%;top:3.51%">1</span><span class="pin" style="left:7.34%;top:29.22%">2</span><span class="pin" style="left:33.46%;top:27.47%">3</span><span class="pin" style="left:53.73%;top:27.47%">4</span><span class="pin" style="left:7.34%;top:37.36%">5</span></div><figcaption><span class="fno">S07</span>정식 산정 탭 — 프로젝트 정보·기본 조건</figcaption><ol class="legend"><li><b>1</b><span>이용방법 — 계산식·작업 순서 안내 창</span></li><li><b>2</b><span>기본배점 구분(별지 제1호서식)</span></li><li><b>3</b><span>지역(별표1 기후지역)</span></li><li><b>4</b><span>연면적 합계</span></li><li><b>5</b><span>적용 조건 체크 — 공공기관 등</span></li></ol></figure>
+<div class="tbl"><table><thead><tr><th class="">입력</th><th class="">의미</th></tr></thead><tbody><tr><td class="">기본배점 구분</td><td class="">비주거 대형(3,000㎡ 이상) · 비주거 소형(500~3,000㎡ 미만) · 주택1 · 주택2 — 연면적·용도로 자동 선택, 직접 변경 가능</td></tr><tr><td class="">지역 · 연면적</td><td class="">EPI 점수 산정 탭 값을 가져옴(탭 진입 시)</td></tr><tr><td class="">건축 행위</td><td class="">신축·재축·전부개축·별동증축 — 제15조③ 의무 적용 판단에 사용</td></tr><tr><td class="">공공기관 건축물</td><td class="">목표점 74점</td></tr><tr><td class="">중앙식 공조방식 채택</td><td class="">제15조④ 의무(기계 3·6·9번) 추가</td></tr><tr><td class="">법 제14조의2 공공건축물</td><td class="">건축 7번 0.6 · 기계 1·2번 0.9 · 전기 8번 0.6 의무 추가</td></tr><tr><td class="">신재생 설치 의무대상</td><td class="">신재생 부문 배점 기준 2배 적용 안내</td></tr><tr><td class="">거실 전면 고효율 LED</td><td class="">전기 1번 의무를 대체(제15조③3호)</td></tr></tbody></table></div>
+<h3 id="s3-5">3-5. 정식 산정 — 결과 · 의무사항</h3>
+<figure class="shot" id="fig-s08_formal_result"><div class="frame"><img src="images/s08_formal_result.webp" width="1272" height="348" loading="lazy" alt="EPI 산정 결과(예제 76.00점 · 적합)"><span class="pin" style="left:2.84%;top:21.20%">1</span><span class="pin" style="left:19.22%;top:21.20%">2</span><span class="pin" style="left:84.73%;top:21.20%">3</span><span class="pin" style="left:1.70%;top:45.20%">4</span></div><figcaption><span class="fno">S08</span>EPI 산정 결과(예제 76.00점 · 적합)</figcaption><ol class="legend"><li><b>1</b><span>EPI 평점 합계 — 목표점·만점</span></li><li><b>2</b><span>부문별 소계 — Ⅰ건축 · Ⅱ기계 · Ⅲ전기 · Ⅳ신재생</span></li><li><b>3</b><span>의무사항 충족 수</span></li><li><b>4</b><span>의무사항 판정표 — 근거·요구·현재·판정</span></li></ol></figure>
+<p>오른쪽 위 배지가 <span class="ok">적합</span>이 되려면 평점 합계가 목표점 이상이고 의무사항이 모두 충족되어야 합니다. 만점 표기(예제 126점)는 보상점수 항목(기계 16·17번)을 뺀 값입니다.</p>
+<h3 id="s3-6">3-6. 정식 산정 — 부문별 배점 선택</h3>
+<figure class="shot" id="fig-s09_formal_items"><div class="frame"><img src="images/s09_formal_items.webp" width="1272" height="546" loading="lazy" alt="Ⅰ. 건축부문 — 항목별 배점 b 선택"><span class="pin" style="left:44.78%;top:19.21%">1</span><span class="pin" style="left:50.44%;top:17.57%">2</span><span class="pin" style="left:93.32%;top:19.21%">3</span><span class="pin" style="left:24.16%;top:17.89%">4</span></div><figcaption><span class="fno">S09</span>Ⅰ. 건축부문 — 항목별 배점 b 선택</figcaption><ol class="legend"><li><b>1</b><span>기본배점 a — 기본배점 구분에 따라 자동</span></li><li><b>2</b><span>배점 b 선택 — 설계값에 해당하는 구간</span></li><li><b>3</b><span>평점 = a × b</span></li><li><b>4</b><span>의무 표시 — 충족 / 미충족</span></li></ol></figure>
+<div class="tbl"><table><thead><tr><th class="">항목 형식</th><th class="">선택 방법</th></tr></thead><tbody><tr><td class="">등급형(grade)</td><td class="">미적용 / 1.0 · 0.9 · 0.8 · 0.7 · 0.6점 — 선택지에 지역별 기준 구간(예: 외벽 Ue 0.490 미만)이 함께 표시</td></tr><tr><td class="">적용형(yes)</td><td class="">미적용 / 1.0점 — 「60% 이상 적용」처럼 조건 충족 시</td></tr><tr><td class="">선택형(opt)</td><td class="">항목 고유 선택지(예: T.A.B / 커미셔닝)</td></tr><tr><td class="">해당 없음</td><td class="">선택한 기본배점 구분에 배점이 없는 항목(예: 공동주택 전용 항목) — 회색 표시</td></tr></tbody></table></div>
+<div class="tip"><b>판정 자료</b>배점은 설계도면·자료로 판정하며 자료가 없으면 적용하지 않은 것으로 봅니다(제15조②). 근거 도면 번호를 함께 정리해 두십시오.</div>
+<h3 id="s3-7">3-7. A4 검토서 · 출력</h3>
+<figure class="shot" id="fig-s10_print"><div class="frame"><img src="images/s10_print.webp" width="1440" height="900" loading="lazy" alt="A4 검토서 탭 — 출력 버튼과 약식 검토서 미리보기"><span class="pin" style="left:65.93%;top:27.04%">1</span><span class="pin" style="left:75.69%;top:27.04%">2</span><span class="pin" style="left:86.98%;top:27.04%">3</span><span class="pin" style="left:26.51%;top:56.48%">4</span></div><figcaption><span class="fno">S10</span>A4 검토서 탭 — 출력 버튼과 약식 검토서 미리보기</figcaption><ol class="legend"><li><b>1</b><span>🖨️ 약식 검토서 출력</span></li><li><b>2</b><span>🖨️ 별지서식 산정서 출력</span></li><li><b>3</b><span>🖼️ JPG 저장</span></li><li><b>4</b><span>A4 미리보기(약식 설계전략 검토서)</span></li></ol></figure>
+<div class="tbl"><table><thead><tr><th class="">출력물</th><th class="">제목</th><th class="">PDF·파일 이름</th></tr></thead><tbody><tr><td class="">약식 검토서</td><td class="">EPI 설계전략 검토서(약식 체크리스트)</td><td class="">EPI_설계전략검토서_약식_공사명_YYYYMMDD</td></tr><tr><td class="">별지서식 산정서</td><td class="">에너지성능지표(EPI) 산정서 — 별지 제1호서식</td><td class="">EPI_산정서_별지1호서식_공사명_YYYYMMDD</td></tr><tr><td class="">JPG</td><td class="">약식 검토서를 쪽별 이미지로 저장(미리보기 창에서 쪽별·전체 저장)</td><td class="">쪽 번호가 붙은 JPG</td></tr></tbody></table></div>
+<p>인쇄 창에서 대상을 「PDF로 저장」으로 고르면 PDF가 만들어집니다. 배경색이 빠지면 인쇄 설정의 「배경 그래픽」을 켭니다.</p>
+<h3 id="s3-8">3-8. 별지서식 산정서 창</h3>
+<figure class="shot" id="fig-s12_formal_win"><div class="frame"><img src="images/s12_formal_win.webp" width="1440" height="900" loading="lazy" alt="별지서식 산정서 새 창 — 상단 고정바(갱신·인쇄/PDF·닫기)"></div><figcaption><span class="fno">S12</span>별지서식 산정서 새 창 — 상단 고정바(갱신·인쇄/PDF·닫기)</figcaption></figure>
+<p>탭 막대 「📑 별지서식 산정서」를 누르면 별지 제1호서식 산정서만 담은 창이 열립니다. 본창에서 배점을 바꾸면 이 창에 바로 반영되고, 반영이 늦으면 「🔄 갱신」을 누릅니다. 팝업이 차단되면 안내 후 정식 산정 탭으로 이동합니다(브라우저에서 팝업 허용).</p>
+<h3 id="s3-9">3-9. 이용안내 · 초기화</h3>
+<figure class="shot" id="fig-s11_help"><div class="frame"><img src="images/s11_help.webp" width="1440" height="900" loading="lazy" alt="이용안내 창 — 화면 오른쪽 「이용안내」 버튼"></div><figcaption><span class="fno">S11</span>이용안내 창 — 화면 오른쪽 「이용안내」 버튼</figcaption></figure>
+<p>오른쪽의 「초기화」 버튼은 약식 체크와 입력을 처음 상태로 되돌립니다(확인 창 표시). 정식 산정 탭의 배점 선택은 탭 안의 초기화 버튼으로 따로 지웁니다.</p>
+<h3 id="s3-10">3-10. 모바일</h3>
+<div class="pair">
+<figure class="shot narrow" id="fig-s13_mobile_main"><div class="frame"><img src="images/s13_mobile_main.webp" width="390" height="844" loading="lazy" alt="휴대전화 — 공사 정보·기본 설정"></div><figcaption><span class="fno">S13</span>휴대전화 — 공사 정보·기본 설정</figcaption></figure>
+<figure class="shot narrow" id="fig-s14_mobile_items"><div class="frame"><img src="images/s14_mobile_items.webp" width="390" height="844" loading="lazy" alt="휴대전화 — 항목 체크, 하단 점수바"></div><figcaption><span class="fno">S14</span>휴대전화 — 항목 체크, 하단 점수바</figcaption></figure>
+</div>
+<p>폭 820px 이하에서는 총점 패널 대신 화면 아래에 점수바가 고정됩니다. 현장·회의 중 점수 확인은 휴대전화로, 정식 산정과 출력은 PC에서 하는 것을 권장합니다.</p>
+</section>
+<section class="ch" id="ch4"><h2><span class="n">04</span>기술기준 해설</h2>
+<p class="lead">이 장의 조문은 「건축물의 에너지절약설계기준」 국토교통부고시 제2026-360호(2026.7.8. 시행) 원문을 2026-10-10 법령 데이터베이스(LawMCP)로 조회해 옮겼습니다. 고시가 개정되면 원문을 다시 확인하십시오.</p>
+<h3 id="s4-1">4-1. EPI 판정 기준 (제15조①②)</h3>
+<div class="tbl"><table><thead><tr><th class="">구분</th><th class="">기준</th><th class="">근거</th></tr></thead><tbody><tr><td class="">일반 건축물</td><td class="">평점합계 <b>65점 이상</b>이면 적합</td><td class="">제15조① 본문</td></tr><tr><td class="">공공기관 신축(별동 증축 포함)</td><td class="">평점합계 <b>74점 이상</b>이면 적합</td><td class="">제15조① 단서</td></tr><tr><td class="">배점 판단</td><td class="">제출자가 제시한 설계도면·자료로 판정, 자료가 없으면 적용되지 않은 것으로 간주</td><td class="">제15조②</td></tr></tbody></table></div>
+<h3 id="s4-2">4-2. 평점 산식 (별지 제1호서식)</h3>
+<div class="eq">평점 = 기본배점(a) × 배점(b)          <span class="c">// 항목별</span>
+EPI = Σ건축 + Σ기계 + Σ전기 + Σ신재생   <span class="c">// 평점 합계</span></div>
+<div class="tbl"><table><thead><tr><th class="">기본배점(a) 구분</th><th class="">대상</th></tr></thead><tbody><tr><td class="">비주거 대형</td><td class="">3,000㎡ 이상</td></tr><tr><td class="">비주거 소형</td><td class="">500~3,000㎡ 미만</td></tr><tr><td class="">주택 1</td><td class="">난방(개별·중앙집중식·지역난방) 적용 공동주택</td></tr><tr><td class="">주택 2</td><td class="">주택 1 + 중앙집중식 냉방 적용 공동주택</td></tr></tbody></table></div>
+<p>배점(b)은 항목마다 1점 · 0.9점 · 0.8점 · 0.7점 · 0.6점 구간으로 정해지며, 구간 기준은 지역(중부1·중부2·남부·제주)과 항목에 따라 다릅니다. 서식의 에너지성능지표는 건축 10 · 기계설비 17 · 전기설비 11 · 신재생설비 4, 모두 42항목입니다.</p>
+<div class="tbl"><table><thead><tr><th class="">부문</th><th class="">항목 수</th><th class="num">비주거 대형 기본배점 합</th></tr></thead><tbody><tr><td class="">Ⅰ 건축</td><td class="">10</td><td class="num">50</td></tr><tr><td class="">Ⅱ 기계설비</td><td class="">17 (16·17번 보상점수)</td><td class="num">39 (보상점수 제외)</td></tr><tr><td class="">Ⅲ 전기설비</td><td class="">11</td><td class="num">24</td></tr><tr><td class="">Ⅳ 신재생설비</td><td class="">4</td><td class="num">13</td></tr><tr><td class="">합계</td><td class="">42</td><td class="num">126</td></tr></tbody></table></div>
+<h3 id="s4-3">4-3. 의무사항</h3>
+<div class="tbl"><table><thead><tr><th class="">대상</th><th class="">의무 내용</th><th class="">근거</th></tr></thead><tbody><tr><td class="">모든 제출 대상</td><td class="">건축부문 1번(외벽 평균 열관류율) 배점 0.6점 이상</td><td class="">제6조2호</td></tr><tr><td class="">연면적 1천㎡ 이상 신축·재축·전부개축·별동증축</td><td class="">건축 7번 0.6점 이상 · 기계 1·2번 0.8점 이상 · 전기 1번 0.8점 이상(또는 거실 전면 고효율 LED) · 신재생 평점 4점 이상</td><td class="">제15조③</td></tr><tr><td class="">위 건축물로 중앙식 공조</td><td class="">기계 3번 0.8점 이상 · 기계 6번 공기조화기 부착형 열회수형환기장치 설치 · 기계 9번 채택</td><td class="">제15조④</td></tr><tr><td class="">법 제14조의2 공공건축물</td><td class="">건축 7번 0.6점 이상(제로에너지 인증 등 예외) · 기계 1·2번 0.9점 이상 · 전기 8번 0.6점 이상</td><td class="">제6조5호 · 별지 제1호서식 의무사항</td></tr></tbody></table></div>
+<div class="warn"><b>부적합 처리</b>별지 제1호서식 의무사항이 미채택이거나 확인되지 않으면 더 이상 검토 없이 부적합으로 판정합니다(서식 주석). 점수가 높아도 의무사항을 먼저 확인하십시오.</div>
+<h3 id="s4-4">4-4. 약식 체크리스트와 정식 산정의 관계</h3>
+<div class="tbl"><table><thead><tr><th class="">구분</th><th class="">약식(EPI 점수 산정)</th><th class="">정식(별지서식)</th></tr></thead><tbody><tr><td class="">쓰는 시점</td><td class="">계획설계 — 어느 부문을 강화할지 결정</td><td class="">기본·실시설계 — 배점 확정, 허가 제출</td></tr><tr><td class="">항목</td><td class="">4부문 44항목(약식 설명)</td><td class="">별지 제1호서식 42항목</td></tr><tr><td class="">점수</td><td class="">항목 고유 배점 합, 100점 만점</td><td class="">평점 = a × b 합(대형 비주거 만점 126)</td></tr><tr><td class="">판정</td><td class="">목표점 대비 달성 여부 + 의무 5~8항목</td><td class="">목표점 + 의무사항 전체</td></tr><tr><td class="">출력</td><td class="">약식 설계전략 검토서</td><td class="">별지 제1호서식 산정서</td></tr></tbody></table></div>
+</section>
+<section class="ch" id="ch5"><h2><span class="n">05</span>실무 작업 방법</h2>
+<p class="lead">설계 단계별로 두 방식을 나눠 쓰고, 제출 전에는 의무사항과 근거 자료를 먼저 확인합니다.</p>
+<h3 id="s5-1">5-1. 설계 단계별 절차</h3>
+<ol class="steps">
+<li><b class="t">계획설계</b>기본 설정으로 목표점과 의무항목을 확인하고, 약식 체크리스트로 부문별 전략(단열 강화·고효율 설비·신재생 규모)을 정합니다.</li>
+<li><b class="t">기본설계</b>정식 산정 탭에서 외벽·지붕·바닥 평균 열관류율, 설비 효율 등 값이 정해진 항목부터 배점 b를 넣어 목표점 여유를 확인합니다.</li>
+<li><b class="t">실시설계</b>모든 항목 배점을 확정하고 의무사항이 6/6처럼 모두 충족되는지 확인합니다. 근거 도면 번호를 정리합니다.</li>
+<li><b class="t">허가 제출</b>별지서식 산정서를 PDF로 저장해 에너지절약계획서에 첨부하고, 약식 검토서는 설계 검토 기록으로 보관합니다.</li>
+</ol>
+<h3 id="s5-2">5-2. 제출 전 확인</h3>
+<ul>
+<li>기본배점 구분이 연면적·용도와 맞는지(대형 3,000㎡ 기준) 확인합니다.</li>
+<li>중앙식 공조, 공공기관, 법 제14조의2 대상 여부를 체크해 의무사항이 빠지지 않게 합니다.</li>
+<li>배점마다 판정 근거(도면·시험성적서·제품 인증)가 있는지 확인합니다 — 없으면 미적용 간주(제15조②).</li>
+<li>고시 개정 여부를 헤더 표시와 법령 원문으로 확인합니다.</li>
+</ul>
+<h3 id="s5-3">5-3. 예제 결과</h3>
+<div class="tbl"><table><thead><tr><th class="">방식</th><th class="">결과</th></tr></thead><tbody><tr><td class="">약식</td><td class="">67 / 100점 · 목표 65점 달성 · 의무 5항목 충족(단열·외피 30 · 기계 15 · 전기 11 · 신재생 11)</td></tr><tr><td class="">정식</td><td class=""><b>76.00점 · 적합</b> (건축 40.30 · 기계설비 16.50 · 전기설비 15.20 · 신재생 4.00) · 의무사항 6/6 충족</td></tr></tbody></table></div>
+</section>
+<section class="ch" id="ch6"><h2><span class="n">06</span>문제 해결 · FAQ</h2>
+<div class="tbl"><table><thead><tr><th class="">증상</th><th class="">해결</th></tr></thead><tbody><tr><td class="">약식 점수와 정식 점수가 다릅니다</td><td class="">배점 체계가 다릅니다. 약식은 설계 전략용 100점 환산, 정식은 별지 제1호서식 a×b 합입니다. 제출에는 정식 결과를 씁니다.</td></tr><tr><td class="">목표점이 74점으로 나옵니다</td><td class="">기관 구분이 「공공기관」으로 되어 있습니다. 공공기관 신축(별동 증축 포함)은 74점입니다(제15조①).</td></tr><tr><td class="">의무 항목이 갑자기 늘었습니다</td><td class="">연면적을 1,000㎡·3,000㎡·10,000㎡ 이상으로 바꾸거나 공공기관·중앙식 공조를 선택하면 해당 의무가 추가됩니다(3-1 표).</td></tr><tr><td class="">새로고침하니 입력이 사라졌습니다</td><td class="">입력값 파일 저장 기능이 없습니다. 작업 결과는 PDF·JPG로 저장해 두십시오(1-3).</td></tr><tr><td class="">별지서식 산정서 창이 안 열립니다</td><td class="">브라우저 팝업이 차단된 경우입니다. 주소창의 팝업 허용 후 다시 누르거나 정식 산정 탭에서 「별지서식 산정서 출력」을 씁니다.</td></tr><tr><td class="">PDF에 배경색이 없습니다</td><td class="">인쇄 창 「설정 더보기」에서 「배경 그래픽」을 켭니다.</td></tr><tr><td class="">매뉴얼 버튼이 열리지 않습니다</td><td class="">매뉴얼은 인터넷 연결이 필요합니다. 오프라인이면 안내 문구만 표시됩니다.</td></tr></tbody></table></div>
+</section>
+<section class="ch" id="ch7"><h2><span class="n">부록</span>참고 자료</h2>
+<h3 id="a1">A1. 예제 입력값</h3>
+<div class="tbl"><table><thead><tr><th class="">구분</th><th class="">값</th></tr></thead><tbody><tr><td class="">공사 정보</td><td class="">만민 건축사 신사옥 신축공사 · 김만민 · 2026-10-10</td></tr><tr><td class="">기본 설정</td><td class="">비주거 · 중부2지역 · 민간 건축물 · 연면적 3,500㎡</td></tr><tr><td class="">약식 체크(27항목)</td><td class="">단열·외피 12(외벽 1·2단계, 열교, 창호 1·2단계, 고성능 창호, 지붕 기준·초과, 최하층 바닥, 기밀, 건축 7번, SHGC 제한) · 기계 6(기계 1·2번, 존별 제어, 기계 6번, 기계 3·9번) · 전기 6(전기 1번, LPD 30%, 외부 조명, 변압기, 대기전력, 승강기) · 신재생 3(태양광, 패시브 설계, 빗물·중수)</td></tr><tr><td class="">정식 배점 b</td><td class="">건축 1·2번 0.9, 3번 0.8, 5번 0.9, 6번 1.0, 7번 0.8 · 기계 1번 0.9, 2·4번 0.8, 7·13번 1.0, 15번 T.A.B · 전기 1번 0.8, 2·4·5·6번 1.0, 8·10번 0.8 · 신재생 1번 1.0</td></tr></tbody></table></div>
+<h3 id="a2">A2. 버전 변경 내역</h3>
+<div class="tbl"><table><thead><tr><th class="">판</th><th class="">변경 내용</th></tr></thead><tbody><tr><td class="">Ver-5.4 (2026-10-10)</td><td class="">사용자 매뉴얼 연결 — 탭 막대 「📘 매뉴얼」, 매뉴얼 웹·PDF 공개(계산 변경 없음)</td></tr><tr><td class="">v5.4.2 (2026-09-06)</td><td class="">별지서식 산정서 미리보기 모바일 좌측 쏠림 정정(중앙 정렬)</td></tr><tr><td class="">v5.4 (2026-09-05)</td><td class="">별지서식 산정서 별도창 · 본창과 실시간 동기화</td></tr><tr><td class="">v5.3 (2026-09-05)</td><td class="">출력물 2종 구분(약식 검토서 / 별지서식 산정서) · 파일 이름 규칙</td></tr><tr><td class="">v5.2 (2026-09-05)</td><td class="">정식 산정(별지 제1호서식 42항목) 탭 추가 · 의무사항 자동 판정</td></tr><tr><td class="">v5.1 (2026-09-05)</td><td class="">법규 정합성 패치 — 목표점 면적 무관 65·74점, 중앙식 공조·법 제14조의2 의무 반영</td></tr><tr><td class="">v5.0 (2026-09-04)</td><td class="">MANMIN v5.0 디자인 통일 · A4 검토서 탭</td></tr></tbody></table></div>
+<h3 id="a3">A3. 용어</h3>
+<div class="tbl"><table><thead><tr><th class="">용어</th><th class="">뜻</th></tr></thead><tbody><tr><td class="">EPI</td><td class="">에너지성능지표 — 별지 제1호서식 항목별 평점의 합계</td></tr><tr><td class="">기본배점(a)</td><td class="">항목별 기본 점수 — 비주거 대형·소형, 주택1·2로 구분</td></tr><tr><td class="">배점(b)</td><td class="">설계 수준에 따른 계수 1.0~0.6점</td></tr><tr><td class="">평점</td><td class="">기본배점 × 배점</td></tr><tr><td class="">평균 열관류율(Ue·Ur·Uf)</td><td class="">외벽(창 포함)·지붕·최하층 바닥 부위별 열관류율의 면적가중 평균</td></tr><tr><td class="">의무사항</td><td class="">점수와 별도로 반드시 충족해야 하는 항목 — 미충족 시 부적합</td></tr><tr><td class="">보상점수</td><td class="">지역난방·개별냉난방 등으로 특정 항목 적용이 불가할 때 주는 점수(기계 16·17번)</td></tr></tbody></table></div>
+</section></main></div>
+<footer class="foot">© 2026 김만민 건축사 · ㈜대성건축사사무소 · EPI 에너지성능지표 산정기 사용자 매뉴얼 Ver-5.4 · 그림은 Ver-5.4 화면(부록 A1 예제)으로 캡처</footer>
+<div class="pfoot"><span>EPI 에너지성능지표 산정기 사용자 매뉴얼 Ver-5.4</span><span>2026-10-10</span></div>
+<div id="lb" role="dialog" aria-label="그림 확대"><img alt=""></div>
+<button class="totop" aria-label="맨 위로">↑</button>
+<script>
+(function(){
+  var lb=document.getElementById('lb'),li=lb.querySelector('img');
+  document.querySelectorAll('figure.shot .frame').forEach(function(f){f.addEventListener('click',function(){li.src=f.querySelector('img').src;li.alt=f.querySelector('img').alt;lb.classList.add('open');});});
+  lb.addEventListener('click',function(){lb.classList.remove('open');li.removeAttribute('src');});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')lb.classList.remove('open');});
+  document.querySelector('.totop').addEventListener('click',function(){window.scrollTo(0,0);});
+  var links=[].slice.call(document.querySelectorAll('nav.toc a'));
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id);});}});},{rootMargin:'0px 0px -70% 0px'});
+    document.querySelectorAll('section.ch,h3[id]').forEach(function(s){io.observe(s);});
+  }
+})();
+</script>
+</body></html>
