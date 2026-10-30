@@ -866,6 +866,15 @@ body.mm-print-tab .score-panel{display:none;}   /* A4 탭에서는 모바일 하
 }
 
 </style>
+<style id="mm-foot-css">/* 하단 버전 표시 — 일조사선 · 건폐용적 footer 와 같은 형식 (2026-10-31) */
+footer.mm-foot{position:relative;z-index:1;border-top:1px solid #e4e9f0;background:#fff;padding:20px;margin-top:10px}
+.mm-foot .foot-inner{max-width:1320px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.mm-foot .foot-nm{font-weight:900;font-size:13px;color:#785a28;letter-spacing:.06em}
+.mm-foot .foot-desc{font-size:11px;color:#64748b;line-height:1.6}
+.mm-foot .foot-copy{font-size:11px;color:#64748b;font-family:'DM Mono',ui-monospace,monospace}
+@media print{footer.mm-foot{display:none!important}}
+@media(max-width:1024px){footer.mm-foot{padding-bottom:calc(var(--score-bar-h,74px) + 20px + env(safe-area-inset-bottom,0px))}} /* 하단 고정 점수 막대에 가리지 않게 */
+</style>
 </head>
 <body>
 <!-- v5.4 — 별지서식 산정서 별도창 상단바 (?view=formal 일 때만 표시) -->
@@ -2678,5 +2687,15 @@ ReactDOM.createRoot(document.getElementById("epi6-root")).render(<App/>);
 
 })();
 </script>
+<!-- ══ FOOTER (하단 버전 표시) ══ -->
+<footer class="mm-foot no-print">
+  <div class="foot-inner">
+    <div>
+      <div class="foot-nm">MANMIN Ver-5.4</div>
+      <div class="foot-desc">EPI 에너지성능지표 산정기 | 건축물의 에너지절약설계기준 제15조</div>
+    </div>
+    <div class="foot-copy">ARCHITECT KIM MANMIN © 2026</div>
+  </div>
+</footer>
 </body>
 </html>
