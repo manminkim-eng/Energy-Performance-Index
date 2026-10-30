@@ -19,7 +19,7 @@ const mmMatch = (req, opt) => caches.keys()
   .then((ks) => ks.reduce((p, k) => p.then((r) => r || caches.open(k).then((c) => c.match(req, opt))), Promise.resolve(undefined)))
   .then((r) => (r && r.type === 'opaque' && req && req.mode === 'cors') ? undefined : r);
 
-const CACHE  = 'epi-v5.4.5';   /* v5.4.4 (2026-10-10) — 이용안내 창 문구 정정(index.html 변경 한 쌍) · v5.4.3 매뉴얼 링크 */
+const CACHE  = 'epi-v5.4.6';   /* v5.4.4 (2026-10-10) — 이용안내 창 문구 정정(index.html 변경 한 쌍) · v5.4.3 매뉴얼 링크 */
 const ORPHAN = ['epi-v3-0'];
 const ASSETS = [
   './', './index.html', './manifest.json',
