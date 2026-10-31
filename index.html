@@ -863,6 +863,10 @@ body.mm-print-tab .score-panel{display:none;}   /* A4 탭에서는 모바일 하
   body.mm-formal-tab .f6-rpt-outer{background:white!important;padding:0!important;overflow:visible!important;border-radius:0!important;margin:0!important;height:auto!important;}
   body.mm-formal-tab .f6-rpt-inner{transform:none!important;transform-origin:unset!important;width:794px!important;}
   body.mm-formal-tab .f6-rpt-hint{display:none!important;}
+  /* 2026-10-31 v5.4.11 — 별지서식 인쇄에 입력 화면(선택 상자 51개 · 프로젝트 · 기본 조건 상자)까지 찍혀 6쪽이던 것 → 별지 창(mm-formal-win)과 같이 산정서(#f6-rpt-outer)만 */
+  body.mm-formal-tab .f6-main-outer:not(.f6-main-inner){display:none!important;}
+  body.mm-formal-tab .f6-main-inner>*:not(#f6-rpt-outer){display:none!important;}
+  body.mm-formal-tab .f6-main-inner{padding:0!important;}
 }
 
 </style>
