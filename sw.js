@@ -1,4 +1,5 @@
 /* ═══════════════════════════════════════════════════
+   v6.1.3 (2026-11-12) — React 18.2.0 → 18.3.1 · Babel 7.23.5 → 7.29.7 · cdnjs 로 통일 · SRI(integrity) · Pretendard CSS SRI(정밀검토 C2) — 화면 · 계산 · 인쇄 불변 · 작업지시서 §25-6-82 · 캐시명 v6.1.3 (종전 v6.1.2)
    v6.1.2 (2026-11-12) — 건물개요 공통 원본 MM-PROJECT v1.2 → v1.3(불러오기 창 표 칸 모양 고정 — 도구 CSS 가 새지 않음 · 저장값 같음, 정밀검토 C10) · 작업지시서 §25-6-80 · 판 6.1 · 캐시명 v6.1.2 (종전 v6.1.1)
    v6.1.1 (2026-11-12) — 회전 · 크기 변경 때 미리보기 창 없음 오류 방지 · 화면 확대 허용(viewport 의 maximum-scale=1.0 · user-scalable=no 삭제 — 휴대폰에서 두 손가락 확대 가능) (정밀검토 B17 · 작업지시서 §25-6-78) · 판 6.1 · 캐시명 v6.1.1 (종전 epi-v6.1.0)
    v6.1.0 (2026-11-12) — 검색 설명 메타(description) 추가(정밀검토 B15 · 작업지시서 §25-6-75) · 판 6.1 · 캐시명 v6.1.0 (종전 epi-v5.4.17)
@@ -22,7 +23,7 @@ const mmMatch = (req, opt) => caches.keys()
   .then((ks) => ks.reduce((p, k) => p.then((r) => r || caches.open(k).then((c) => c.match(req, opt))), Promise.resolve(undefined)))
   .then((r) => (r && r.type === 'opaque' && req && req.mode === 'cors') ? undefined : r);
 
-const CACHE  = 'epi-v6.1.2';   /* v5.4.9 (2026-10-31) — 설치 안내 iPad 판별 · 설치 화면 금색 · manifest 화면 미리보기 · 마스크 아이콘 */   /* v5.4.4 (2026-10-10) — 이용안내 창 문구 정정(index.html 변경 한 쌍) · v5.4.3 매뉴얼 링크 */
+const CACHE  = 'epi-v6.1.3';   /* v5.4.9 (2026-10-31) — 설치 안내 iPad 판별 · 설치 화면 금색 · manifest 화면 미리보기 · 마스크 아이콘 */   /* v5.4.4 (2026-10-10) — 이용안내 창 문구 정정(index.html 변경 한 쌍) · v5.4.3 매뉴얼 링크 */
 const ORPHAN = ['epi-v3-0'];
 const ASSETS = [
   './', './index.html', './manifest.json',
