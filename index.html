@@ -3,7 +3,7 @@
 <head>
   <script defer src="/manmin-blog-report/web/assets/manmin-analytics.js"></script>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>EPI 에너지성능지표 산정기 · MANMIN Ver-6.1</title>
 <!-- 검색 설명(정밀검토 B15 · 2026-11-12) -->
 <meta name="description" content="건축물의 에너지절약설계기준 제15조 · EPI 4개 부문 배점·목표점(65/74) 판정·의무항목 체크 · A4 검토서 — MANMIN Ver-6.1 | ARCHITECT KIM MANMIN">
@@ -1820,12 +1820,12 @@ function toggleScorePanel(){
   window.addEventListener('resize',()=>{
     clearTimeout(_resizeTimer);
     _resizeTimer=setTimeout(()=>{
-      if(document.getElementById('pvBackdrop').classList.contains('open')) scaleA4();
+      {const pv=document.getElementById('pvBackdrop'); if(pv&&pv.classList.contains('open')) scaleA4();}   /* 2026-11-12 미리보기 창이 없을 때 회전 · 크기 변경 오류 방지(B17 회차 함께) */
     },80);
   });
   window.addEventListener('orientationchange',()=>{
     setTimeout(()=>{
-      if(document.getElementById('pvBackdrop').classList.contains('open')) scaleA4();
+      {const pv=document.getElementById('pvBackdrop'); if(pv&&pv.classList.contains('open')) scaleA4();}   /* 2026-11-12 미리보기 창이 없을 때 회전 · 크기 변경 오류 방지(B17 회차 함께) */
     },300);
   });
 })();
