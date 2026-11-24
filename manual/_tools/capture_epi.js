@@ -1,8 +1,10 @@
 // EPI 매뉴얼 화면 캡처 — usage: node capture_epi.js <repoDir> <outDir>
 // RTS 매뉴얼 capture.js 와 같은 규격: 1440×900 · DSF 1.25 · _marks.json(번호 배지 % 좌표)
-const {chromium}=require('playwright');const fs=require('fs');const path=require('path');const {setup,server}=require('./serve');
+const {chromium}=require(process.env.MM_PW||'playwright');const fs=require('fs');const path=require('path');const {setup,server}=require('./serve');
 const repo=path.resolve(process.argv[2]),out=path.resolve(process.argv[3]);fs.mkdirSync(out,{recursive:true});
-const VW=1440,VH=900,DSF=1.25,PORT=8893;
+const VW=1440,VH=900,DSF=1.25,PORT=+(process.env.MM_PORT||8893);
+/* Ver-6.1(웹 v6.1.5) — 공사명 · 작성자 기본값이 빈 칸으로 바뀜 → 예제 값을 직접 넣음 · s03 건축 행위 · BEMS 제외 · 약식 = 참고 점수 안내 배지 ·
+   s17 약식 「점수 달성 · 의무 n건 미충족」 · s18 500㎡ 미만 「제출대상 아님」 추가 · _example.json 에 판정 조건 3건(cases) 기록 */
 
 /* 예제 — 약식: 67점(목표 65) · 1천㎡↑ 의무 5항목 충족 */
 const BRIEF=['w1','w2','w3','win1','win2','win4','r1','r2','r3','s1','s2','s3','h1','h2','h3','v1','hv1','hv2','l1','l2','l3','p1','p3','p4','rn1','en2','en3'];
@@ -15,14 +17,17 @@ const FORMAL=[['arch',1,0.9],['arch',2,0.9],['arch',3,0.8],['arch',5,0.9],['arch
 const SHOTS=[
  {id:'s01_overview',tab:'main',clip:'viewport',m:[['.tab-bar-inner','작업 탭'],['.sum-bar','요약 스트립'],['#scorePanelCard','EPI 총점 패널'],['#projName','공사 정보'],['#selBldType','기본 설정'],['#sectionTabs','부문 탭'],['.help-fab','이용안내']]},
  {id:'s02_tabs',tab:'main',clip:'.app-header',m:[['.tb:nth-child(1)','EPI 점수 산정'],['.tb:nth-child(2)','정식 산정'],['.tb:nth-child(3)','A4 검토서'],['.tb-win','별지서식 산정서'],['.tb-manual','매뉴얼'],['.hdr-right','근거 고시']]},
- {id:'s03_config',tab:'main',clip:'.main-wrap',cropTo:['#projName','#regionInfo'],pad:16,m:[['#projName','공사명'],['#projAuthor','작성자'],['#projDate','작성일'],['#selBldType','건물 용도'],['#selRegion','기후대'],['#selOrgType','기관 구분'],['#floorArea','연면적'],['#targetBanner','목표점 배너']]},
+ {id:'s03_config',tab:'main',clip:'.main-wrap',cropTo:['#projName','#regionInfo'],pad:16,m:[['#projName','공사명'],['#projAuthor','작성자'],['#projDate','작성일'],['#selBldType','건물 용도'],['#selRegion','기후대'],['#selOrgType','기관 구분'],['#floorArea','연면적'],['#selKind','건축 행위'],['#chkBemsEx','BEMS 제외 대상'],['#targetBanner','목표점 배너'],['#condLiteNote','약식 = 참고 점수 안내']]},
  {id:'s04_items',tab:'main',clip:'.main-wrap',cropTo:['#sectionTabs','#item-s2'],pad:16,maxH:1500,m:[['#sectionTabs','부문 탭'],['#item-w1','항목 체크'],['#item-w1 .pts-badge','배점'],['#item-s2 .mand-badge','의무 배지']]},
  {id:'s05_score',tab:'main',clip:'#scorePanelCard',m:[['#totalScore','EPI 총점'],['#verdict','판정'],['#bdBreak','부문별 점수'],['#mandatoryList','의무항목 현황']]},
+ {id:'s17_mand_miss',tab:'main',pre:"toggleItem('s2');toggleItem('win3');toggleItem('en1')",clip:'#scorePanelCard',post:"toggleItem('s2');toggleItem('win3');toggleItem('en1')",m:[['#totalScore','총점(목표 이상)'],['#verdict','점수 달성 · 의무 1건 미충족'],['#mandatoryList .mand-warn','미충족 의무항목']]},
+ {id:'s18_small',tab:'main',pre:"(()=>{const e=document.getElementById('floorArea');e.value='300';onConfigChange();})()",clip:'.main-wrap',cropTo:['#selBldType','#condWarnArea'],pad:16,post:"(()=>{const e=document.getElementById('floorArea');e.value='3500';onConfigChange();})()",m:[['#floorArea','연면적 300㎡'],['#targetBanner','배너 — 제출대상 아님 · 판정 없음'],['#condWarnArea','500㎡ 미만 안내']]},
  {id:'s06_mech',tab:'main',pre:"document.querySelector('.stab[data-sec=mech]').click()",clip:'.main-wrap',cropTo:['#sectionTabs','#sec-mech'],pad:16,maxH:1100,m:[['.stab[data-sec=mech]','기계설비'],['#item-h1','기계 1번'],['#item-v1','기계 6번']]},
- {id:'s07_formal_top',tab:'formal',clip:'#epi6-root',maxH:1200,m:[['#epi6-root .f6-no-print','이용방법'],['#epi6-root select','기본배점 구분'],['text:지역 (별표1 기후지역)','지역'],['text:연면적 합계','연면적'],['text:공공기관 건축물','적용 조건']]},
+ {id:'s07_formal_top',tab:'formal',clip:'#epi6-root',maxH:1200,m:[['#epi6-root .f6-no-print','이용방법'],['#epi6-root select','기본배점 구분'],['text:지역 (별표1 기후지역)','지역'],['text:연면적 합계','연면적'],['text:공공기관 건축물','적용 조건'],['text:건축 행위','건축 행위(3선택지)'],['text:BEMS 제외 대상 —','BEMS 제외 대상']]},
  {id:'s08_formal_result',tab:'formal',clip:'box:EPI 산정 결과',m:[['text~EPI 평점 합계','평점 합계'],['text~건축부문','부문별 소계'],['text~의무사항','의무사항'],['th','의무 판정표']]},
  {id:'s09_formal_items',tab:'formal',clip:'box:건축부문 — 배점',maxH:980,m:[['.f6-epi-a','기본배점 a'],['.f6-epi-sel select','배점 b 선택'],['.f6-epi-pt','평점 a×b'],['.f6-mand-badge','의무 표시']]},
  {id:'s10_print',tab:'print',clip:'viewport',m:[['.mm-btn-print','약식 검토서 출력'],['.mm-btn-formal','별지서식 산정서 출력'],['#btn-jpg','JPG 저장'],['#a4Sheet,.a4-page','A4 미리보기']]},
+ {id:'s19_a4_foot',tab:'print',pre:"(()=>{const e=[...document.querySelectorAll('.a4-footer')].find(x=>x.getClientRects().length);if(e)window.scrollTo(0,e.getBoundingClientRect().top+scrollY-300);})()",clip:'.a4-footer',m:[['.a4-footer-note','고시 표기 · 약식 = 참고 점수 · 판정 규칙'],['.a4-footer-brand','판 표기']]},
  {id:'s11_help',tab:'main',clip:'viewport',pre:'toggleModal()',post:'toggleModal()',m:[]},
  {id:"s15_proj_menu",tab:"main",pre:"localStorage.setItem('MANMIN_PROJECT_V1',JSON.stringify({\"사업명\": \"○○ 지식산업센터 신축공사\", \"작성자\": \"김만민 건축사\", \"연면적\": \"12500\", \"지상층\": \"15\", \"지하층\": \"2\", \"updated\": \"2026-11-09 10:00\", \"from\": \"부하계산(RTS)\"}));window.scrollTo(0,0);document.querySelector('.mm-proj-btn').click()",wait:700,clip:'viewport',post:"document.querySelectorAll('.mm-proj-menu').forEach(e=>e.remove())",m:[[".mm-proj-btn", "「🏢 건물개요」 단추(오른쪽 아래)"], [".mm-proj-menu button[data-a=\"save\"]", "저장 — 지금 값 담기"], [".mm-proj-menu button[data-a=\"load\"]", "불러오기"], [".mm-proj-menu button[data-a=\"exp\"]", "파일로 내보내기(.json)"], [".mm-proj-menu button[data-a=\"imp\"]", "파일 가져오기"]]},
  {id:"s16_proj_load",tab:"main",pre:"(()=>{window.__mmK=MMProject.keys;window.__mmB=__mmK.map(k=>MMProject.fields(k).map(e=>e.value));const __sv=(e,v)=>{const d=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value');d.set.call(e,v);e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));};const e=MMProject.fields('사업명')[0];if(e)__sv(e,'');localStorage.setItem('MANMIN_PROJECT_V1',JSON.stringify({\"사업명\": \"○○ 지식산업센터 신축공사\", \"작성자\": \"김만민 건축사\", \"연면적\": \"12500\", \"지상층\": \"15\", \"지하층\": \"2\", \"updated\": \"2026-11-09 10:00\", \"from\": \"부하계산(RTS)\"}));MMProject.load();})()",wait:900,clip:'viewport',post:"(()=>{document.querySelectorAll('.mm-proj-back').forEach(e=>e.remove());const __sv=(e,v)=>{const d=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value');d.set.call(e,v);e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));};__mmK.forEach((k,i)=>MMProject.fields(k).forEach((e,j)=>{if(e.value!==__mmB[i][j])__sv(e,__mmB[i][j]);}));localStorage.removeItem('MANMIN_PROJECT_V1');})()",m:[[".mm-proj-dlg input[type=checkbox]", "체크한 항목만 채움(빈 칸은 체크된 채로)"], [".mm-proj-dlg .mm-proj-warn", "이미 입력된 칸 — 직접 체크해야 덮어씀"], [".mm-proj-dlg .mm-proj-ok", "채우기"]]},
@@ -37,7 +42,7 @@ async function srv0(){
  await pg.addInitScript(()=>{window.alert=()=>{};window.confirm=()=>true;try{localStorage.clear()}catch(e){}});
  await pg.goto(`http://127.0.0.1:${PORT}/index.html`);await pg.evaluate(()=>document.fonts.ready);await pg.waitForTimeout(2500);
  // 공사 정보·작성일 고정(결과 재현성)
- await pg.evaluate(()=>{const d=document.getElementById('projDate');if(d){d.value='2026-10-10';d.dispatchEvent(new Event('input',{bubbles:true}));d.dispatchEvent(new Event('change',{bubbles:true}));}});
+ await pg.evaluate(()=>{[['projName','만민 건축사 신사옥 신축공사'],['projAuthor','김만민']].forEach(([id,v])=>{const e=document.getElementById(id);if(e){e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));}});const d=document.getElementById('projDate');if(d){d.value='2026-11-24';d.dispatchEvent(new Event('input',{bubbles:true}));d.dispatchEvent(new Event('change',{bubbles:true}));}});
  await pg.evaluate(ids=>{ids.forEach(id=>toggleItem(id));},BRIEF);
  await pg.waitForTimeout(400);
  const brief=await pg.evaluate(()=>({score:document.getElementById('totalScore').textContent,verdict:document.getElementById('sb-verdict').textContent,mand:document.getElementById('mandatoryList').innerText}));
@@ -54,7 +59,14 @@ async function srv0(){
    return log;},FORMAL);
  await pg.waitForTimeout(800);
  const formal=await pg.evaluate(()=>{const t=document.querySelector('#epi6-root').innerText;const m=t.match(/EPI 평점 합계[\s\S]{0,80}/);return m?m[0].replace(/\s+/g,' '):'';});
- const meta={};
+ // 판정 조건 3건(웹 v6.1.5) — 약식 의무 연동 · 74점 공공+신축만 · 연면적 무효/500㎡ 미만
+ const cases=await pg.evaluate(()=>{const sel=(id,v)=>{const e=document.getElementById(id);e.value=v;onConfigChange();};const r={};
+   const vt=()=>document.getElementById('verdict').innerText.replace(/\s+/g,' ').trim();
+   toggleItem('s2');toggleItem('win3');toggleItem('en1');r.mandMiss={score:document.getElementById('totalScore').textContent,verdict:vt(),sum:document.getElementById('sb-verdict').textContent};toggleItem('s2');toggleItem('win3');toggleItem('en1');
+   sel('selOrgType','public');r.pubNew=getTargetScore();sel('selKind','rebuild');r.pubRebuild=getTargetScore();sel('selKind','etc');r.pubEtc=getTargetScore();
+   r.pubEtcMand=getMandatoryStatus().map(m=>m.label+' '+m.min);sel('selKind','new');sel('selOrgType','private');
+   sel('floorArea','300');r.small=vt();sel('floorArea','0');r.input=vt();sel('floorArea','3500');r.back=vt();return r;});
+ const meta={};let a4txt='';
  for(const S of SHOTS){
   await pg.evaluate(t=>{goTab(t);window.scrollTo(0,0);},S.tab);await pg.waitForTimeout(700);
   if(S.pre){try{await pg.evaluate(S.pre);}catch(e){errs.push(S.id+' pre '+e.message);}}
@@ -76,6 +88,7 @@ async function srv0(){
    const marks=[];(S.m||[]).forEach(([sel,label],i)=>{const e=find(sel);if(!e){marks.push({n:i+1,label,miss:sel});return;}const a=abs(e);
      marks.push({n:i+1,label,x:+((a.x-clip.x)/clip.width*100).toFixed(2),y:+((a.y-clip.y)/clip.height*100).toFixed(2),w:+(a.w/clip.width*100).toFixed(2),h:+(a.h/clip.height*100).toFixed(2)});});
    return {clip,marks};},{S,VW,VH});
+  if(S.id==='s10_print')a4txt=await pg.evaluate(()=>{const e=document.getElementById('a4Sheet');return e?e.innerText.replace(/\s+/g,' '):'';});
   if(info.err){errs.push(S.id+' '+info.err);continue;}
   const c=info.clip;const cl={x:Math.max(0,c.x),y:Math.max(0,c.y),width:Math.min(c.width,VW),height:c.height};
   if(S.clip==='viewport'){await pg.screenshot({path:path.join(out,S.id+'.png'),clip:{x:0,y:0,width:VW,height:VH}});}
@@ -89,12 +102,12 @@ async function srv0(){
  // 모바일 2장
  const mctx=await b.newContext({viewport:{width:390,height:844},deviceScaleFactor:2,serviceWorkers:'block',isMobile:true,hasTouch:true});await setup(mctx,repo);
  const mp=await mctx.newPage();await mp.addInitScript(()=>{window.alert=()=>{};window.confirm=()=>true;});
- await mp.goto(`http://127.0.0.1:${PORT}/index.html`);await mp.waitForTimeout(2500);await mp.evaluate(ids=>{ids.forEach(id=>toggleItem(id));},BRIEF);await mp.waitForTimeout(400);
+ await mp.goto(`http://127.0.0.1:${PORT}/index.html`);await mp.waitForTimeout(2500);await mp.evaluate(()=>{[['projName','만민 건축사 신사옥 신축공사'],['projAuthor','김만민'],['projDate','2026-11-24']].forEach(([id,v])=>{const e=document.getElementById(id);if(e){e.value=v;e.dispatchEvent(new Event('input',{bubbles:true}));}});});await mp.evaluate(ids=>{ids.forEach(id=>toggleItem(id));},BRIEF);await mp.waitForTimeout(400);
  await mp.screenshot({path:path.join(out,'s13_mobile_main.png')});meta['s13_mobile_main']={w:390,h:844,marks:[]};
  await mp.evaluate(()=>{const el=document.getElementById('sectionTabs');window.scrollTo(0,el.getBoundingClientRect().top+scrollY-120);});await mp.waitForTimeout(500);
  await mp.screenshot({path:path.join(out,'s14_mobile_items.png')});meta['s14_mobile_items']={w:390,h:844,marks:[]};
  fs.writeFileSync(path.join(out,'_marks.json'),JSON.stringify(meta,null,1));
- fs.writeFileSync(path.join(out,'_example.json'),JSON.stringify({brief,formal,fset},null,1));
- console.log(JSON.stringify({brief,formal,fset,errs:errs.slice(0,15)},null,1));
+ fs.writeFileSync(path.join(out,'_example.json'),JSON.stringify({brief,formal,fset,cases,A_a4:a4txt},null,1));
+ console.log(JSON.stringify({brief,formal,fset,cases,errs:errs.slice(0,15)},null,1));
  await b.close();s.close();
 }
