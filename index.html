@@ -1015,8 +1015,8 @@ footer.mm-foot{position:relative;z-index:1;border-top:1px solid #e4e9f0;backgrou
       </div>
       <div class="card-body">
         <div class="proj-grid">
-          <div><label class="config-label" for="projName">공사명</label><input class="mm-inp" id="projName" type="text" placeholder="공사명" value="만민 건축사 신사옥 신축공사" autocomplete="off"/></div>
-          <div><label class="config-label" for="projAuthor">작성자</label><input class="mm-inp" id="projAuthor" type="text" placeholder="작성자명" value="김만민" autocomplete="off"/></div>
+          <div><label class="config-label" for="projName">공사명</label><input class="mm-inp" id="projName" type="text" placeholder="예) ○○ 신축공사" value="" autocomplete="off"/></div>
+          <div><label class="config-label" for="projAuthor">작성자</label><input class="mm-inp" id="projAuthor" type="text" placeholder="예) 작성자 성명" value="" autocomplete="off"/></div>
           <div><label class="config-label" for="projDate">작성일</label><input class="mm-inp" id="projDate" type="date"/></div>
         </div>
       </div>
@@ -1064,15 +1064,32 @@ footer.mm-foot{position:relative;z-index:1;border-top:1px solid #e4e9f0;backgrou
             <input class="config-input" id="floorArea" type="number" placeholder="예) 3500" value="3500" oninput="onConfigChange()"/>
           </div>
         </div>
+        <!-- v6.1.5 3행: 건축 행위 · BEMS 제외(제15조① 단서 · 제15조③ · 합리화규정 제6조② 단서) -->
+        <div class="config-row">
+          <div class="config-field">
+            <div class="config-label">건축 행위</div>
+            <select class="config-select" id="selKind" onchange="onConfigChange()">
+              <option value="new">신축 · 별동증축</option>
+              <option value="rebuild">재축 · 전부개축</option>
+              <option value="etc">증축 · 용도변경 · 리모델링 등</option>
+            </select>
+          </div>
+          <div class="config-field">
+            <div class="config-label">BEMS 제외 대상</div>
+            <label class="config-select" style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:11px;line-height:1.35;"><input type="checkbox" id="chkBemsEx" onchange="onConfigChange()" style="width:15px;height:15px;flex-shrink:0;"/>합리화규정 제6조② 단서 1~4호 해당(제외 가능)</label>
+          </div>
+        </div>
         <!-- 목표점수 배너 -->
         <div id="targetBanner"></div>
         <!-- 조건부 의무 경고 -->
+        <div class="cond-warn" id="condWarnArea"></div>
         <div class="cond-warn" id="condWarn500">
           <strong>⚠ 연면적 500㎡ 이상</strong> — 에너지 절약 계획서 제출 의무 대상입니다.
         </div>
         <div class="cond-warn" id="condWarnCentral">
           <strong>⚠ 중앙식 공조 방식 채택 시 (1,000㎡↑, 제15조④)</strong> — 기계 3번 배점 0.8 이상 · 6번 <b>공기조화기 부착형</b> 열회수형환기장치 설치 · 9번 공조기 팬 가변속제어 채택이 의무입니다.
         </div>
+        <div class="cond-warn show" id="condLiteNote"><strong>ℹ 약식 = 참고 점수</strong> — 부문 상한(40/15/15/30)과 항목 고정 점수는 MANMIN 참고 모델이며 법정 평점이 아닙니다. 법정 평점(기본배점 a × 배점 b)은 「정식 산정」 탭에서 확인하십시오. 기숙사 · 오피스텔은 비주거 기본배점 적용(제23조④).</div>
         <div id="regionInfo"></div>
       </div>
     </div>
@@ -1200,7 +1217,8 @@ footer.mm-foot{position:relative;z-index:1;border-top:1px solid #e4e9f0;backgrou
         <div class="help-sec-title">EPI 목표 점수 기준 (제15조① · 고시 제2026-360호)</div>
         <!-- v5.4.4 — 제15조① 원문(LawMCP 2026-10-10): 평점합계 65점 이상 적합, 단서 공공기관 신축(별동 증축 포함) 74점 — 연면적 조건 없음 -->
         <div class="help-item"><div class="help-item-title">일반 건축물</div><div class="help-item-desc">평점합계 <b>65점 이상</b> (연면적과 무관)</div></div>
-        <div class="help-item"><div class="help-item-title">공공기관 신축 건축물 (별동 증축 포함)</div><div class="help-item-desc">평점합계 <b>74점 이상</b></div></div>
+        <div class="help-item"><div class="help-item-title">공공기관 신축 건축물 (별동 증축 포함)</div><div class="help-item-desc">평점합계 <b>74점 이상</b> — 재축 · 전부개축 · 증축 · 리모델링 등은 공공기관도 65점(「건축 행위」 칸)</div></div>
+        <div class="help-item"><div class="help-item-title">약식 점수 = 참고 점수</div><div class="help-item-desc">약식 탭의 부문 상한 · 항목 점수는 MANMIN 참고 모델입니다. 법정 평점(a × b)은 「정식 산정」 탭 · 별지 제1호서식 산정서로 확인하십시오. 판정은 합계 ≥ 목표 + 의무 전 항목 충족일 때만 「기준 충족」입니다. 연면적 500㎡ 미만 · 0 · 음수는 판정하지 않습니다.</div></div>
         <div class="help-item"><div class="help-item-title">1,000㎡ 미만 (500㎡↑ 제출대상)</div><div class="help-item-desc">목표점은 동일(65·74점) · 제15조③ 개별 의무항목만 미적용 · 500~2,000㎡ 단지 내 500㎡ 미만 개별동은 제15조 미적용 가능(제4조5호)</div></div>
         <div class="help-item"><div class="help-item-title">전 제출대상 공통 의무 (제6조2호)</div><div class="help-item-desc">에너지성능지표 <b>건축부문 1번</b>(외벽 평균 열관류율) 배점 <b>0.6점 이상</b> 획득</div></div>
       </div>
@@ -1214,8 +1232,8 @@ footer.mm-foot{position:relative;z-index:1;border-top:1px solid #e4e9f0;backgrou
       <div class="help-sec">
         <div class="help-sec-title">공공기관 추가 의무항목</div>
         <div class="help-item"><div class="help-item-title">기계 10번: 전기대체 냉방설비 (제8조3호)</div><div class="help-item-desc">「공공기관 에너지이용 합리화 추진에 관한 규정」 제10조 적용 건축물 0.6점 이상 — <b>동 규정 제10조는 2026.4월 개정으로 삭제</b>되어 현재 적용 대상 없음(참고 표시)</div></div>
-        <div class="help-item"><div class="help-item-title">법 제14조의2 공공건축물 (영 제10조의2: 공공기관 소유·관리 업무·교육연구시설 3,000㎡↑)</div><div class="help-item-desc">건축 7번 0.6점↑(제6조5호) · <b>기계 1·2번 0.9점↑</b>(제8조4호) · <b>전기 8번 0.6점↑</b>(제10조4호)</div></div>
-        <div class="help-item"><div class="help-item-title">전기 8번: BEMS 구축 (10,000㎡↑ 신축·별동증축)</div><div class="help-item-desc">필수 1.0점(제10조5호 · 합리화규정 제6조②) — 공동주택·오피스텔·공장·발전시설 제외</div></div>
+        <div class="help-item"><div class="help-item-title">법 제14조의2 공공건축물 (영 제10조의2: 공공기관 소유·관리 업무·교육연구시설 3,000㎡↑)</div><div class="help-item-desc"><b>건축 또는 리모델링</b> 모두 적용 — 건축 7번 0.6점↑(제6조5호, 제로에너지건축물 인증 또는 제21조② 1차에너지소요량 적합 시 예외 가능) · <b>기계 1·2번 0.9점↑</b>(제8조4호) · <b>전기 8번 0.6점↑</b>(제10조4호) · 약식은 공공 3,000㎡↑을 대상으로 보고 표시(용도 확인은 사용자)</div></div>
+        <div class="help-item"><div class="help-item-title">전기 8번: BEMS 구축 (10,000㎡↑ 신축·별동증축)</div><div class="help-item-desc">필수 1.0점(제10조5호 · 합리화규정 제6조②) — 단서 1~4호(공동주택 · 오피스텔 · 공장 · 자원순환 관련 시설 · 발전시설 · 공단이사장 인정)는 <b>제외할 수 있음</b>(재량) → 「BEMS 제외 대상」 체크 시 의무 판정 「제외」, 허가권자 · 기관 확인</div></div>
       </div>
       <div class="help-sec">
         <div class="help-sec-title">중앙식 공조 시 조건부 의무</div>
@@ -1266,12 +1284,12 @@ const EPI_ITEMS = {
     {id:'h1',g:'heat-items',name:'[기계 1번] 고효율 난방 설비',
      desc:'히트펌프 등 고효율 난방기기 · 에너지소비효율등급 1등급 이상',
      pts:3,b:'pts-3',sub:{l:'설비 종류',o:['콘덴싱 가스 보일러(≥92%)','고효율 히트펌프(COP≥3.0)','지역난방 연계','폐열회수형 열펌프']},
-     mandatory:['all1000'],mandMin:0.8},
+     mandatory:['all1000','public3000'],mandMin:0.8},
     /* ★ 기계 2번 — 연면적 1000m² 이상 의무 0.8점+ */
     {id:'h2',g:'heat-items',name:'[기계 2번] 고효율 냉방 설비',
      desc:'히트펌프 등 고효율 냉방기기 · 에너지소비효율등급 1등급 이상',
      pts:3,b:'pts-3',sub:{l:'냉방 방식',o:['고효율 EHP(EER≥3.5)','흡수식 냉동기','지역냉방 연계','냉각탑+냉수순환']},
-     mandatory:['all1000'],mandMin:0.8},
+     mandatory:['all1000','public3000'],mandMin:0.8},
     {id:'h3',g:'heat-items',name:'냉난방 존별 개별 제어',desc:'존별 개별 온도 제어 + 스마트 온도조절기',pts:2,b:'pts-2',sub:null},
     /* ★ 기계 6번 — 중앙식 공조 의무 */
     {id:'v1',g:'vent-items',name:'[기계 6번] 폐열회수형 환기장치 (HRV/ERV)',
@@ -1344,15 +1362,19 @@ const REGION_DATA={
   '제주': {wall_apt:0.290,wall_other:0.410,roof:null, floor_heat:0.290,win_apt:1.600,win_other:2.200},
 };
 
-const state={checked:{},region:'중부2',bldType:'non_residential',orgType:'private',floorArea:3500};
+const state={checked:{},region:'중부2',bldType:'non_residential',orgType:'private',floorArea:3500,kind:'new',bemsEx:false};
 
 /* ── 연면적·기관 기반 로직 ── */
 function getTargetScore(){
-  const a=state.floorArea,isP=state.orgType==='public';
-  // 제15조① — 연면적과 무관하게 65점(공공기관 신축 74점). 1,000㎡ 기준은 제15조③ 개별 의무항목에만 적용
-  return isP?74:65;
+  const isP=state.orgType==='public';
+  // 제15조① — 연면적과 무관하게 65점. 단서: 공공기관이 신축(별동 증축 포함)하는 건축물만 74점 (v6.1.5 — 재축 · 증축 등은 65점)
+  return (isP&&state.kind==='new')?74:65;
 }
 function isOver1000(){return state.floorArea>=1000;}
+/* 제15조③ — 1천㎡↑ 신축 · 재축 · 전부개축 · 별동증축 (v6.1.5 건축 행위 연동) */
+function isS15(){return isOver1000()&&state.kind!=='etc';}
+/* 제10조5호 · 합리화규정 제6조② — 공공 1만㎡↑ 신축 · 별동증축 (단서 1~4호 제외 가능) */
+function isBemsOn(){return isPublicOver10000()&&state.kind==='new';}
 function isPublic(){return state.orgType==='public';}
 function isPublicOver10000(){return isPublic()&&state.floorArea>=10000;}
 /* 법 제14조의2 · 영 제10조의2 — 공공기관 소유·관리 업무·교육연구시설 3,000㎡↑ (용도 확인은 사용자 판단) */
@@ -1361,9 +1383,9 @@ function isPublicOver3000(){return isPublic()&&state.floorArea>=3000;}
 function isMandatoryActive(item){
   if(!item.mandatory) return false;
   for(const m of item.mandatory){
-    if(m==='all1000'&&isOver1000()) return true;
+    if(m==='all1000'&&isS15()) return true;
     if(m==='public1000'&&isPublic()&&isOver1000()) return true;
-    if(m==='public10000'&&isPublicOver10000()) return true;
+    if(m==='public10000'&&isBemsOn()&&!state.bemsEx) return true;
     if(m==='public3000'&&isPublicOver3000()) return true;
     if(m==='central') return false; // 중앙식 공조는 별도 체크 (JS에서)
   }
@@ -1440,7 +1462,8 @@ function getMandatoryStatus(){
     const checked=!!(state.checked[id]);
     items.push({id,label,min,checked,pts:item?item.pts:0,active});
   };
-  if(over1000){
+  const s15=isS15();
+  if(s15){
     check('s2','건축7: 외피 태양열 저감',0.6,true);
     check('h1','기계1: 고효율 난방',0.8,true);
     check('h2','기계2: 고효율 냉방',0.8,true);
@@ -1448,10 +1471,28 @@ function getMandatoryStatus(){
     check('rn1','신재생: 에너지 확보',4.0,true);
   }
   const pub3k=isPublicOver3000();
-  if(pub3k){ check('h1','기계1: 고효율 난방(법14조의2 공공 0.9)',0.9,true); check('h2','기계2: 고효율 냉방(법14조의2 공공 0.9)',0.9,true); }
-  if(pub10k) check('pe1','전기8: BEMS 구축(공공 1만㎡↑)',1.0,true);
-  else if(pub3k) check('pe1','전기8: BEMS/원격검침(법14조의2 공공 0.6)',0.6,true);
+  /* 법 제14조의2 — 건축 또는 리모델링(제6조5호 · 제8조4호 · 제10조4호): 건축 행위와 무관 */
+  if(pub3k){ if(!s15&&state.bldType!=='residential') check('s2','건축7: 외피 태양열 저감(법14조의2 공공 0.6)',0.6,true);
+    check('h1','기계1: 고효율 난방(법14조의2 공공 0.9)',0.9,true); check('h2','기계2: 고효율 냉방(법14조의2 공공 0.9)',0.9,true); }
+  const bemsOn=isBemsOn();
+  if(bemsOn&&!state.bemsEx) check('pe1','전기8: BEMS 구축(공공 1만㎡↑ 신축·별동증축)',1.0,true);
+  else{
+    if(bemsOn) items.push({id:'pe1x',label:'전기8: BEMS — 제외(합리화규정 제6조② 단서 1~4호 해당 — 허가권자 · 기관 확인)',min:'-',checked:true,pts:0,active:true,info:true});
+    if(pub3k) check('pe1','전기8: BEMS/원격검침(법14조의2 공공 0.6)',0.6,true);
+  }
   return items;
+}
+
+/* v6.1.5 — 약식 판정: 합계 ≥ 목표 && 의무 전 항목 체크 (연면적 무효 · 500㎡ 미만은 판정 보류) */
+function liteJudge(total,target){
+  const a=state.floorArea;
+  const mand=getMandatoryStatus().filter(m=>!m.info);
+  const miss=mand.filter(m=>!m.checked).length;
+  if(!(a>0)) return {code:'input',pass:false,miss};
+  if(a<500) return {code:'small',pass:false,miss};
+  if(total>=target&&miss===0) return {code:'pass',pass:true,miss};
+  if(total>=target) return {code:'mand',pass:false,miss};
+  return {code:'score',pass:false,miss};
 }
 
 function updateScore(){
@@ -1465,8 +1506,9 @@ function updateScore(){
   const fill=(total/100)*circ;
   const ring=document.getElementById('ringFill');
   ring.setAttribute('stroke-dasharray',`${fill} ${circ}`);
-  const pass=total>=targetScore;
-  const rc=pass?'#10b981':total>=(targetScore*0.8)?'#f59e0b':'#ef4444';
+  const J=liteJudge(total,targetScore);
+  const pass=J.pass;
+  const rc=pass?'#10b981':(J.code==='input'||J.code==='small')?'#94a3b8':total>=(targetScore*0.8)?'#f59e0b':'#ef4444';
   ring.setAttribute('stroke',rc);
 
   // 목표점 마커 — 목표 위치에 짧은 선
@@ -1480,7 +1522,10 @@ function updateScore(){
   document.getElementById('targetLabel').textContent=`목표: ${targetScore}점`;
 
   const v=document.getElementById('verdict');
-  if(pass){v.className='score-verdict verdict-pass';v.innerHTML=`<span>✓</span><span>목표 달성 (${targetScore}점 이상)</span>`;}
+  if(J.code==='input'){v.className='score-verdict verdict-init';v.innerHTML='<span>⚠</span><span>연면적 입력 확인 — 판정 보류</span>';}
+  else if(J.code==='small'){v.className='score-verdict verdict-init';v.innerHTML='<span>—</span><span>500㎡ 미만 — 제출대상 아님(영 제10조①)</span>';}
+  else if(pass){v.className='score-verdict verdict-pass';v.innerHTML=`<span>✓</span><span>목표 달성 (${targetScore}점 이상)</span>`;}
+  else if(J.code==='mand'){v.className='score-verdict verdict-fail';v.innerHTML=`<span>✗</span><span>점수 달성 · 의무 ${J.miss}건 미충족</span>`;}
   else if(total>0){v.className='score-verdict verdict-fail';v.innerHTML=`<span>✗</span><span>목표 미달 (${targetScore-total}점 부족)</span>`;}
   else{v.className='score-verdict verdict-init';v.innerHTML='<span>⬡</span><span>항목을 선택하세요</span>';}
 
@@ -1499,15 +1544,16 @@ function updateScore(){
   document.getElementById('progressText').textContent=`${cnt} / ${tot}개 항목 적용`;
 
   /* ── 모바일 컴팩트 바 업데이트 ── */
-  updateCompactBar(total, targetScore, sc, pass, rc);
+  updateCompactBar(total, targetScore, sc, pass, rc, J);
 
   /* 의무항목 패널 */
   const mandItems=getMandatoryStatus();
   const ml=document.getElementById('mandatoryList');
   if(mandItems.length===0){
-    ml.innerHTML=`<div class="mandatory-item mand-na"><span class="mand-icon micon-na">—</span>연면적 1,000㎡ 미만 — 의무항목 없음</div>`;
+    ml.innerHTML=`<div class="mandatory-item mand-na"><span class="mand-icon micon-na">—</span>${isOver1000()?'증축 · 용도변경 등 — 제15조③ 개별 의무항목 미적용':'연면적 1,000㎡ 미만 — 제15조③ 개별 의무항목 미적용'} · 건축 1번 0.6점(제6조2호)은 공통 의무 — 정식 산정에서 확인</div>`;
   }else{
     ml.innerHTML=mandItems.map(m=>{
+      if(m.info) return`<div class="mandatory-item mand-na"><span class="mand-icon micon-na">—</span><span>${m.label}</span></div>`;
       const ok=m.checked;
       return`<div class="mandatory-item ${ok?'mand-ok':'mand-warn'}">
         <span class="mand-icon ${ok?'micon-ok':'micon-warn'}">${ok?'✓':'!'}</span>
@@ -1523,6 +1569,8 @@ function onConfigChange(){
   state.bldType=document.getElementById('selBldType').value;
   state.orgType=document.getElementById('selOrgType').value;
   state.floorArea=parseFloat(document.getElementById('floorArea').value)||0;
+  const _k=document.getElementById('selKind'); state.kind=_k?_k.value:'new';
+  const _b=document.getElementById('chkBemsEx'); state.bemsEx=!!(_b&&_b.checked);
   updateRegionInfo();
   updateTargetBanner();
   refreshMandatoryBadges();
@@ -1545,11 +1593,15 @@ function updateTargetBanner(){
   const ts=getTargetScore();
   const isPub=isPublic();
   const over=isOver1000();
-  const over10k=isPublicOver10000();
+  const bemsOn=isBemsOn();
   const bg=isPub?'tb-public':'tb-private';
   const iconBg=isPub?'#059669':'#1d4ed8';
-  let sub=`연면적 ${state.floorArea.toLocaleString()}㎡ · ${over?'1,000㎡ 이상 제15조③ 의무항목 적용':'1,000㎡ 미만 — 제15조③ 개별 의무항목 미적용(건축1번 0.6점은 공통 의무)'}`;
-  if(over10k) sub+=` · 10,000㎡ 이상 BEMS 의무`;
+  const kindLbl={new:'신축·별동증축',rebuild:'재축·전부개축',etc:'증축·용도변경 등'}[state.kind]||'';
+  let sub=`연면적 ${state.floorArea.toLocaleString()}㎡ · ${kindLbl} · ${isS15()?'1,000㎡ 이상 제15조③ 의무항목 적용':(over?'제15조③ 개별 의무항목 미적용(신축·재축·전부개축·별동증축만 · 건축1번 0.6점은 공통 의무)':'1,000㎡ 미만 — 제15조③ 개별 의무항목 미적용(건축1번 0.6점은 공통 의무)')}`;
+  if(isPub&&state.kind!=='new') sub+=` · 74점은 공공 신축(별동증축 포함)만 — 목표 65점`;
+  if(bemsOn) sub+=state.bemsEx?` · BEMS 제외(제6조② 단서 — 허가권자·기관 확인)`:` · 10,000㎡ 이상 BEMS 의무`;
+  if(!(state.floorArea>0)) sub='연면적을 입력하십시오 (0 · 빈 칸 · 음수 — 판정 보류)';
+  else if(state.floorArea<500) sub=`연면적 ${state.floorArea.toLocaleString()}㎡ — 500㎡ 미만 에너지절약계획서 제출대상 아님(영 제10조①) · 판정 없음`;
   document.getElementById('targetBanner').innerHTML=`
   <div class="target-banner ${bg}">
     <div class="tb-icon" style="background:${iconBg}">
@@ -1566,6 +1618,10 @@ function updateTargetBanner(){
 function updateCondWarnings(){
   const over=isOver1000();
   document.getElementById('condWarn500').className='cond-warn'+(state.floorArea>=500?' show':'');
+  const wa=document.getElementById('condWarnArea');
+  if(wa){ const bad=!(state.floorArea>0), small=!bad&&state.floorArea<500;
+    wa.innerHTML=bad?'<strong>⚠ 연면적 입력 확인</strong> — 0 · 빈 칸 · 음수는 판정하지 않습니다.':(small?'<strong>⚠ 연면적 500㎡ 미만</strong> — 에너지절약계획서 제출대상이 아닙니다(녹색건축물법 시행령 제10조①). 점수는 참고로만 표시하고 판정은 하지 않습니다.':'');
+    wa.className='cond-warn'+((bad||small)?' show':''); }
   // 중앙식 경고는 항상 표시 (사용자 참고용)
   document.getElementById('condWarnCentral').className='cond-warn show';
 }
@@ -1592,7 +1648,10 @@ function buildA4(){
   ['insul','mech','elec','renew'].forEach(c=>{sc[c]=calcCatScore(c);total+=sc[c];});
   total=Math.min(total,100);
   const targetScore=getTargetScore();
-  const isPass=total>=targetScore;
+  const J=liteJudge(total,targetScore);
+  const isPass=J.pass;
+  const kindLbl={new:'신축·별동증축',rebuild:'재축·전부개축',etc:'증축·용도변경 등'}[state.kind]||'';
+  const vTxt=J.code==='input'?'판정 보류<br>(연면적 입력 확인)':J.code==='small'?'제출대상 아님<br>(500㎡ 미만)':isPass?`✓ 기준 충족<br>(${targetScore}점 이상)`:J.code==='mand'?`✗ 의무 미충족<br>(점수 충족 · ${J.miss}건)`:`✗ 기준 미달<br>(${targetScore-total}점 부족)`;
   const bldLbl=state.bldType==='residential'?'공동주택':'비주거 (업무·상업·학교 등)';
   const orgLbl=isPublic()?'공공기관':'민간';
   const projName=document.getElementById('projName').value||'(미입력)';
@@ -1616,13 +1675,13 @@ function buildA4(){
   <div class="a4-hd-l">
     <div class="a4-hd-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
     <div><div class="a4-hd-title">EPI 설계전략 검토서 (약식)</div>
-    <div class="a4-hd-sub">건축물의 에너지절약설계기준 제6조 &nbsp;·&nbsp; 국토교통부 고시 제2025-738호 &nbsp;·&nbsp; MANMIN Ver-6.1</div></div>
+    <div class="a4-hd-sub">건축물의 에너지절약설계기준 제6조 · 제15조 &nbsp;·&nbsp; 국토교통부고시 제2026-360호 &nbsp;·&nbsp; MANMIN Ver-6.1</div></div>
   </div>
-  <div class="a4-hd-r"><div class="a4-hd-date">작성일: ${projDate}</div><div class="a4-hd-law">2025.12.31 시행</div></div>
+  <div class="a4-hd-r"><div class="a4-hd-date">작성일: ${projDate}</div><div class="a4-hd-law">2026. 7. 8. 시행</div></div>
 </div>
 <div class="a4-info-grid">
   <div class="a4-info-cell"><div class="a4-info-label">건물 용도</div><div class="a4-info-val">${bldLbl}</div></div>
-  <div class="a4-info-cell"><div class="a4-info-label">기관 구분</div><div class="a4-info-val">${orgLbl} · ${state.floorArea.toLocaleString()}㎡</div></div>
+  <div class="a4-info-cell"><div class="a4-info-label">기관 구분</div><div class="a4-info-val">${orgLbl} · ${kindLbl} · ${state.floorArea.toLocaleString()}㎡</div></div>
   <div class="a4-info-cell"><div class="a4-info-label">적용 기후대</div><div class="a4-info-val">${state.region}지역</div></div>
 </div>
 <div class="a4-score-box">
@@ -1637,7 +1696,7 @@ function buildA4(){
     <div class="a4-sc-bar-track"><div class="a4-sc-bar-fill" style="width:${pct}%;background:${info.color}"></div></div>
     <div class="a4-sc-bar-val" style="color:${info.color}">${s}/${info.max}</div></div>`;}).join('')}
   </div>
-  <div class="a4-verdict-box ${isPass?'a4-vp':'a4-vf'}">${isPass?`✓ 기준 충족<br>(${targetScore}점 이상)`:`✗ 기준 미달<br>(${targetScore-total}점 부족)`}</div>
+  <div class="a4-verdict-box ${isPass?'a4-vp':'a4-vf'}">${vTxt}</div>
 </div>
 <table class="a4-proj-tbl">
   <tr><td class="pk">공 사 명</td><td class="pv" colspan="3">${projName}</td></tr>
@@ -1647,7 +1706,7 @@ ${mandItems.length>0?`
 <div class="a4-mand-box">
   <div class="a4-mand-title">⚠ 의무항목 체크리스트 (연면적 ${state.floorArea.toLocaleString()}㎡ 기준)</div>
   <div class="a4-mand-grid">
-    ${mandItems.map(m=>`<div class="a4-mand-item ${m.checked?'a4-mand-ok':'a4-mand-warn'}">
+    ${mandItems.map(m=>m.info?`<div class="a4-mand-item a4-mand-na">— ${m.label}</div>`:`<div class="a4-mand-item ${m.checked?'a4-mand-ok':'a4-mand-warn'}">
       ${m.checked?'✔':'✗'} ${m.label} (최소 ${m.min}점) — ${m.checked?'충족':'미충족'}
     </div>`).join('')}
   </div>
@@ -1682,7 +1741,7 @@ ${[
   </div>
 </div>`).join('')}
 <div class="a4-footer">
-  <div class="a4-footer-note">※ 국토교통부 고시 제2025-738호 기준으로 산정되었습니다.<br>※ 연면적 기준에 따라 목표점수 및 의무항목이 적용됩니다. 실제 허가 제출 시 설계도서와 일치 여부를 반드시 확인하십시오.</div>
+  <div class="a4-footer-note">※ 국토교통부고시 제2026-360호(2026. 7. 8. 시행 · 실체 개정 제2025-738호) 기준으로 산정되었습니다.<br>※ 약식 점수는 MANMIN 참고 모델(부문 상한 40/15/15/30 · 항목 고정 점수)로 법정 평점이 아닙니다. 법정 평점(기본배점 a × 배점 b)은 별지 제1호서식 산정서(정식 산정)로 확인하십시오.<br>※ 판정 = 합계 목표점 이상 + 의무항목 전 항목 충족. 연면적 · 건축 행위에 따라 목표점수 및 의무항목이 적용됩니다. 실제 허가 제출 시 설계도서와 일치 여부를 반드시 확인하십시오.</div>
   <div class="a4-footer-brand">MANMIN Ver-6.1</div>
 </div>`;
 }
@@ -1749,7 +1808,7 @@ function resetAll(){
 const CAT_COLORS={insul:'#10b981',mech:'#3b82f6',elec:'#f59e0b',renew:'#a78bfa'};
 const CAT_SHORT={insul:'단열',mech:'기계',elec:'전기',renew:'신재생'};
 
-function updateCompactBar(total, targetScore, sc, pass, rc){
+function updateCompactBar(total, targetScore, sc, pass, rc, J){
   /* 미니 링 */
   const miniCirc=2*Math.PI*20; // r=20 → 125.66
   const miniFill=(total/100)*miniCirc;
@@ -1764,8 +1823,11 @@ function updateCompactBar(total, targetScore, sc, pass, rc){
   /* 판정 텍스트 */
   const cv=document.getElementById('compactVerdict');
   if(cv){
-    if(total===0){cv.textContent='항목을 선택하세요';cv.style.color='var(--text3)';}
+    if(J&&J.code==='input'){cv.textContent='연면적 입력 확인';cv.style.color='var(--text3)';}
+    else if(J&&J.code==='small'){cv.textContent='500㎡ 미만 — 제출대상 아님';cv.style.color='var(--text3)';}
+    else if(total===0){cv.textContent='항목을 선택하세요';cv.style.color='var(--text3)';}
     else if(pass){cv.textContent=`✓ 목표 달성 (${targetScore}점↑)`;cv.style.color='var(--accent3)';}
+    else if(J&&J.code==='mand'){cv.textContent=`✗ 의무 ${J.miss}건 미충족`;cv.style.color='#fca5a5';}
     else{cv.textContent=`✗ 목표 미달 (${targetScore-total}점 부족)`;cv.style.color='#fca5a5';}
   }
   const ct=document.getElementById('compactTarget');
@@ -1870,7 +1932,8 @@ function mmSnap(){
   if(typeof state==='undefined'||typeof calcCatScore!=='function') return null;
   var sc={}, total=0; ['insul','mech','elec','renew'].forEach(function(c){ sc[c]=calcCatScore(c); total+=sc[c]; }); total=Math.min(total,100);
   var target=getTargetScore(); var checked=Object.keys(state.checked||{}).filter(function(k){ return state.checked[k]; }).length;
-  return {sc:sc,total:total,target:target,pass:total>=target,bld:_selText('selBldType'),region:state.region,org:_selText('selOrgType'),area:state.floorArea,checked:checked};
+  var J=(typeof liteJudge==='function')?liteJudge(total,target):{code:total>=target?'pass':'score',pass:total>=target,miss:0};
+  return {sc:sc,total:total,target:target,pass:J.pass,code:J.code,miss:J.miss,bld:_selText('selBldType'),region:state.region,org:_selText('selOrgType'),area:state.floorArea,checked:checked};
 }
 
 /* ═══════════════ A4 검토서 렌더 — 원본 buildA4() 가 #a4Sheet 를 채운다 · 표제·푸터만 v5.0 ═══════════════ */
@@ -1921,7 +1984,8 @@ window.mmSetSum=function(){
   if(!s){ ['sb-bld','sb-region','sb-org','sb-target','sb-score','sb-verdict'].forEach(function(id){ f(id,'—'); }); return; }
   f('sb-bld', s.bld||'—'); f('sb-region', s.region?s.region+'지역':'—'); f('sb-org', (s.org||'—')+(s.area?' · '+Number(s.area).toLocaleString()+'㎡':''));
   f('sb-target', s.target+' 점'); f('sb-score', s.total+' / 100', s.pass?'':(s.total>=s.target*0.8?'na':'ng'));
-  f('sb-verdict', s.checked===0?'항목 미선택':(s.pass?'기준 충족':'미달 −'+(s.target-s.total)+'점'), s.checked===0?'na':(s.pass?'':'ng'));
+  var vt=s.code==='input'?'연면적 입력 확인':s.code==='small'?'제출대상 아님(500㎡ 미만)':s.checked===0?'항목 미선택':(s.pass?'기준 충족':(s.code==='mand'?'의무 '+s.miss+'건 미충족':'미달 −'+(s.target-s.total)+'점'));
+  f('sb-verdict', vt, (s.code==='input'||s.code==='small'||s.checked===0)?'na':(s.pass?'':'ng'));
 };
 /* updateScore 래핑 — 원본은 모든 입력 변화 끝에서 updateScore() 를 부른다 → 스트립 갱신 · A4 탭이 열려 있으면 재렌더 (§3-4) */
 (function(){ var _u=window.updateScore; if(typeof _u==='function'){ window.updateScore=function(){ var r=_u.apply(this,arguments); mmSetSum(); var t=document.getElementById('tab-print'); if(t&&t.classList.contains('active')) renderA4(); return r; }; } mmSetSum(); })();
@@ -2328,14 +2392,14 @@ function HowModal({onClose}){
         {tab==="eq"&&<>
           <div style={{fontSize:11,fontWeight:800,color:ACCENT,marginBottom:8}}>산정식</div>
           <span className="f6-fml-eq">평점 = 기본배점(a) × 배점(b) &nbsp; b ∈ {"{1.0, 0.9, 0.8, 0.7, 0.6}"} · 미적용 0</span>
-          <span className="f6-fml-eq">EPI 합계 = Σ건축 + Σ기계 + Σ전기 + Σ신재생 ≥ 65점 (공공기관 신축 74점) — 제15조①</span>
+          <span className="f6-fml-eq">EPI 합계 = Σ건축 + Σ기계 + Σ전기 + Σ신재생 ≥ 65점 (공공기관 신축·별동증축만 74점) — 제15조①</span>
           <span className="f6-fml-eq">Ue = [Σ(외벽 U×면적)+Σ(창·문 U×면적)] / Σ면적 · 간접부위 ×0.7 (창·문 ×0.8)</span>
           <div style={{fontSize:11,fontWeight:800,color:ACCENT,margin:"14px 0 8px"}}>의무사항</div>
           <span className="f6-fml-eq f6-hi">전 제출대상(500㎡↑): 건축 1번 b ≥ 0.6 — 제6조2호</span>
           <span className="f6-fml-eq f6-hi">1,000㎡↑ 신축·재축·전부개축·별동증축: 건축7 ≥0.6 · 기계1·2 ≥0.8 · 전기1 ≥0.8(또는 거실 전면 LED) · 신재생 소계 ≥4점 — 제15조③</span>
           <span className="f6-fml-eq f6-hi">+ 중앙식 공조: 기계3 ≥0.8 · 기계6 공조기 부착형 · 기계9 채택 — 제15조④</span>
-          <span className="f6-fml-eq f6-hi">법 제14조의2 공공건축물(업무·교육연구 3,000㎡↑): 건축7 ≥0.6 · 기계1·2 ≥0.9 · 전기8 ≥0.6 — 제6조5호·제8조4호·제10조4호</span>
-          <span className="f6-fml-eq f6-hi">공공기관 10,000㎡↑ 신축·별동증축: 전기8 = 1점(BEMS) — 제10조5호</span>
+          <span className="f6-fml-eq f6-hi">법 제14조의2 공공건축물(업무·교육연구 3,000㎡↑) 건축 또는 리모델링: 건축7 ≥0.6 · 기계1·2 ≥0.9 · 전기8 ≥0.6 — 제6조5호·제8조4호·제10조4호</span>
+          <span className="f6-fml-eq f6-hi">공공기관 10,000㎡↑ 신축·별동증축: 전기8 = 1점(BEMS) — 제10조5호 · 합리화규정 제6조② (단서 1~4호 제외 가능)</span>
           <div style={{fontSize:11,color:"#6b7280",marginTop:8,lineHeight:1.8}}>※ 제4조: 증축·용도변경(별동·50%↑ 2,000㎡↑ 제외) 제15조 미적용 가능 · 500~2,000㎡ 단지 내 500㎡ 미만 개별동 미적용 가능 · ZEB 예비인증 제출 시 설계검토서 면제 · 제21조② 1차에너지소요량(150 / 공공 130 / 1,000㎡ 미만 200 kWh/㎡·yr) 적합 시 제15조 미적용(제4조8호)</div>
         </>}
         {tab==="ref"&&<>
@@ -2381,7 +2445,7 @@ function ItemRow({s,r,ctx,sel,setS,mandKeys}){
 function App(){
   const [showHow,setShowHow]=useState(false);
   const [proj,setProj]=useState({name:"",designer:"",date:new Date().toISOString().slice(0,10)});
-  const [cfg,setCfg]=useState({cls:"L",region:"중부2",area:3500,pub:false,central:false,law14:false,renewDuty:false,ledAll:false,newBuild:true});
+  const [cfg,setCfg]=useState({cls:"L",region:"중부2",area:3500,pub:false,central:false,law14:false,renewDuty:false,ledAll:false,newBuild:true,rebuild:false,bemsEx:false});
   const setC=(k,v)=>setCfg(p=>({...p,[k]:v}));
   const [sel,setSel]=useState({});   // key `${sec}-${no}` → option value
   const setS=(k,v)=>setSel(p=>({...p,[k]:v}));
@@ -2417,7 +2481,8 @@ function App(){
         const st=(typeof state!=='undefined')?state:window.state; if(!st) return;
         const area=+st.floorArea||0;
         const cls=st.bldType==='residential'?'H1':(area>=3000?'L':'S');
-        setCfg(p=>({...p,region:REGIONS.includes(st.region)?st.region:p.region,area,pub:st.orgType==='public',cls:(p.cls==='H2'&&cls==='H1')?'H2':cls}));
+        const kd=st.kind||'new';
+        setCfg(p=>({...p,region:REGIONS.includes(st.region)?st.region:p.region,area,pub:st.orgType==='public',cls:(p.cls==='H2'&&cls==='H1')?'H2':cls,newBuild:kd!=='etc',rebuild:kd==='rebuild',bemsEx:!!st.bemsEx}));
         const g=id=>document.getElementById(id)?.value||"";
         setProj(p=>({name:g('projName')||p.name,designer:g('projAuthor')||p.designer,date:g('projDate')||p.date}));
       }catch(e){}
@@ -2443,7 +2508,7 @@ function App(){
     });
     const total=Object.values(sub).reduce((t,v)=>t+v,0);
     const maxTotal=Object.values(max).reduce((t,v)=>t+v,0);
-    const target=cfg.pub?TARGET_PUBLIC:TARGET_PRIVATE;
+    const target=(cfg.pub&&cfg.newBuild&&!cfg.rebuild)?TARGET_PUBLIC:TARGET_PRIVATE;   // v6.1.5 — 제15조① 단서: 공공기관 신축(별동 증축 포함)만 74
     const g=(s,no)=>rows[s].find(r=>r.it.no===no);
     const over=cfg.area>=AREA_MAND&&cfg.newBuild;
     const isRes=ctx.res;
@@ -2451,10 +2516,12 @@ function App(){
     const M=[];
     M.push({id:"arch-1",law:"제6조2호",txt:"건축 1번 외벽 평균열관류율 배점 0.6 이상 (전 제출대상)",ok:g("arch",1).b>=0.6,req:"b ≥ 0.6",cur:g("arch",1).b});
     if(over&&!isRes) M.push({id:"arch-7",law:"제15조③1호",txt:"건축 7번 태양열취득 배점 0.6 이상",ok:g("arch",7).b>=0.6,req:"b ≥ 0.6",cur:g("arch",7).b});
-    if(over){
+    if(over||cfg.law14){   /* v6.1.5 — 제8조4호 「건축 또는 리모델링」: 법14조의2 대상은 건축 행위 · 1천㎡와 무관 */
       const need=cfg.law14?0.9:0.8, law=cfg.law14?"제8조4호(법14조의2)":"제15조③2호";
       M.push({id:"mech-1",law,txt:`기계 1번 난방설비 배점 ${need} 이상`,ok:g("mech",1).b>=need,req:`b ≥ ${need}`,cur:g("mech",1).b});
       if(!g("mech",2).na) M.push({id:"mech-2",law,txt:`기계 2번 냉방설비 배점 ${need} 이상 (지역냉방 60%↑ 제외)`,ok:g("mech",2).b>=need,req:`b ≥ ${need}`,cur:g("mech",2).b});
+    }
+    if(over){
       M.push({id:"elec-1",law:"제15조③3호",txt:"전기 1번 조명밀도 배점 0.8 이상 또는 거실 전면 고효율 LED",ok:g("elec",1).b>=0.8||cfg.ledAll,req:"b ≥ 0.8 / LED",cur:cfg.ledAll?"LED":g("elec",1).b});
       M.push({id:"renew",law:"제15조③4호",txt:"신·재생설비부문 평점 4점 이상",ok:sub.renew>=4,req:"소계 ≥ 4.0",cur:f2(sub.renew)});
       if(cfg.central){
@@ -2464,12 +2531,19 @@ function App(){
       }
     }
     if(cfg.law14&&!over&&!isRes) M.push({id:"arch-7b",law:"제6조5호",txt:"건축 7번 배점 0.6 이상 (법14조의2 공공건축물)",ok:g("arch",7).b>=0.6,req:"b ≥ 0.6",cur:g("arch",7).b});
-    if(cfg.pub&&cfg.area>=AREA_BEMS&&cfg.newBuild) M.push({id:"elec-8",law:"제10조5호",txt:"전기 8번 BEMS 배점 1점 (공공 1만㎡↑ 신축·별동증축)",ok:g("elec",8).b>=1,req:"b = 1.0",cur:g("elec",8).b});
-    else if(cfg.law14) M.push({id:"elec-8b",law:"제10조4호",txt:"전기 8번 배점 0.6 이상 (법14조의2 공공건축물)",ok:g("elec",8).b>=0.6,req:"b ≥ 0.6",cur:g("elec",8).b});
+    const bemsOn=cfg.pub&&cfg.area>=AREA_BEMS&&cfg.newBuild&&!cfg.rebuild;   // 합리화규정 제6조② — 신축 · 별동증축
+    if(bemsOn&&!cfg.bemsEx) M.push({id:"elec-8",law:"제10조5호",txt:"전기 8번 BEMS 배점 1점 (공공 1만㎡↑ 신축·별동증축)",ok:g("elec",8).b>=1,req:"b = 1.0",cur:g("elec",8).b});
+    else{
+    if(bemsOn) M.push({id:"elec-8x",ex:true,law:"제10조5호 · 합리화규정 제6조② 단서",txt:"전기 8번 BEMS — 제외(단서 1~4호 해당 — 허가권자 · 기관 확인)",ok:true,req:"제외",cur:"제외"});
+    if(cfg.law14) M.push({id:"elec-8b",law:"제10조4호",txt:"전기 8번 배점 0.6 이상 (법14조의2 공공건축물)",ok:g("elec",8).b>=0.6,req:"b ≥ 0.6",cur:g("elec",8).b});
+    }
     const mandOK=M.every(m=>m.ok);
-    const pass=total>=target&&mandOK;
-    const mandKeys={}; M.forEach(m=>{const k=m.id.replace(/b$/,""); if(rows[k.split("-")[0]]) mandKeys[k]=m.ok;});
-    return {rows,sub,max,total,maxTotal,target,M,mandOK,pass,mandKeys};
+    /* v6.1.5 — 연면적 0 · 빈 칸 · 음수 = 판정 보류 · 500㎡ 미만 = 제출대상 아님(영 제10조①) */
+    const judge=!(cfg.area>0)?"input":(cfg.area<500?"small":"ok");
+    const pass=judge==="ok"&&total>=target&&mandOK;
+    const vtxt=judge==="input"?"판정 보류 (연면적 입력 확인)":judge==="small"?"제출대상 아님 (500㎡ 미만)":(pass?"적합":"부적합");
+    const mandKeys={}; M.forEach(m=>{if(m.ex) return; const k=m.id.replace(/b$/,""); if(rows[k.split("-")[0]]) mandKeys[k]=m.ok;});
+    return {rows,sub,max,total,maxTotal,target,M,mandOK,pass,mandKeys,judge,vtxt};
   },[sel,cfg,ctx,ci]);
 
   /* A4 스케일링 */
@@ -2492,10 +2566,11 @@ function App(){
   const clsLabel=CLASSES[cfg.cls].label;
   const condRows=[
     ["기본배점 구분",clsLabel],["지역(별표1)",cfg.region+"지역"],["연면적 합계",cfg.area.toLocaleString()+" ㎡"],
-    ["구분",(cfg.pub?"공공기관":"민간")+(cfg.newBuild?" · 신축/재축/전부개축/별동증축":" · 증축·용도변경 등")],
+    ["구분",(cfg.pub?"공공기관":"민간")+(cfg.newBuild?(cfg.rebuild?" · 재축·전부개축":" · 신축·별동증축"):" · 증축·용도변경·리모델링 등")],
     ["중앙식 공조",cfg.central?"채택":"미채택"],["법 제14조의2 공공건축물",cfg.law14?"해당(업무·교육연구 3,000㎡↑)":"비해당"],
     ["신재생 의무화 대상",ctx.dbl?"해당 (배점 기준 2배)":"비해당"],
   ];
+  if(cfg.bemsEx) condRows.push(["BEMS 제외 대상","합리화규정 제6조② 단서 1~4호 해당(허가권자 · 기관 확인)"]);
 
   return <div>
     {/* 탭 안내바 (v5 헤더 공유) */}
@@ -2533,7 +2608,8 @@ function App(){
           <div><LabelEl>연면적 합계</LabelEl><InpNum val={cfg.area} onChange={v=>setC("area",v)} unit="㎡" min={0} step={10}/>
             <div style={{fontSize:11,color:"#6b7280",marginTop:4}}>500㎡↑ 제출대상(영 제10조①) · 1,000㎡↑ 제15조③</div></div>
           <div><LabelEl>건축 행위</LabelEl>
-            <Sel val={cfg.newBuild?"1":"0"} onChange={v=>setC("newBuild",v==="1")}><option value="1">신축·재축·전부개축·별동증축</option><option value="0">증축·용도변경·대장변경 (제4조4호)</option></Sel></div>
+            <Sel val={cfg.newBuild?(cfg.rebuild?"2":"1"):"0"} onChange={v=>setCfg(p=>({...p,newBuild:v!=="0",rebuild:v==="2"}))}><option value="1">신축·별동증축</option><option value="2">재축·전부개축</option><option value="0">증축·용도변경·리모델링·대장변경 (제4조4호)</option></Sel>
+            <div style={{fontSize:11,color:"#6b7280",marginTop:4}}>74점은 공공 신축·별동증축만(제15조①) · 제15조③은 신축·재축·전부개축·별동증축</div></div>
         </div>
         <div className="f6-g-4col" style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:10}}>
           <Chk val={cfg.pub} onChange={v=>setC("pub",v)}>공공기관 건축물 (목표 74점)</Chk>
@@ -2542,10 +2618,12 @@ function App(){
           <Chk val={cfg.renewDuty} onChange={v=>setC("renewDuty",v)}>신재생 설치 의무대상 (신재생법) — 배점 2배</Chk>
         </div>
         <div style={{marginTop:10}}><Chk val={cfg.ledAll} onChange={v=>setC("ledAll",v)}>거실 전면 고효율제품 LED 설치 (전기 1번 의무 대체 — 제15조③3호)</Chk></div>
+        <div style={{marginTop:8}}><Chk val={cfg.bemsEx} onChange={v=>setC("bemsEx",v)}>BEMS 제외 대상 — 공공기관 에너지이용 합리화 추진에 관한 규정 제6조② 단서 1~4호 해당(제외 가능 · 공동주택 · 오피스텔 · 공장 · 자원순환 관련 시설 · 발전시설 · 공단이사장 인정)</Chk></div>
+        {(!(cfg.area>0)||cfg.area<500)&&<div style={{marginTop:8,padding:"8px 10px",borderRadius:8,background:"#fff7ed",border:"1px solid #fed7aa",fontSize:11,color:"#9a3412"}}>{!(cfg.area>0)?"⚠ 연면적 입력 확인 — 0 · 빈 칸 · 음수는 판정하지 않습니다.":"⚠ 연면적 500㎡ 미만 — 에너지절약계획서 제출대상이 아닙니다(녹색건축물법 시행령 제10조①). 판정하지 않습니다."}</div>}
       </Box>
 
       {/* 결과 요약 */}
-      <Box title="📊 EPI 산정 결과" right={<span style={{fontSize:11,fontWeight:700,padding:"3px 10px",borderRadius:99,background:R.pass?"#dcfce7":"#fee2e2",color:R.pass?"#15803d":"#b91c1c"}}>{R.pass?"적합":"부적합"}</span>}>
+      <Box title="📊 EPI 산정 결과" right={<span style={{fontSize:11,fontWeight:700,padding:"3px 10px",borderRadius:99,background:R.pass?"#dcfce7":(R.judge==="ok"?"#fee2e2":"#f1f5f9"),color:R.pass?"#15803d":(R.judge==="ok"?"#b91c1c":"#475569")}}>{R.vtxt}</span>}>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:10}}>
           <Card label="EPI 평점 합계" value={f2(R.total)} unit="점" formula={`목표 ${R.target}점 · 만점 ${R.maxTotal}`} bc={R.total>=R.target?"green":"red"}/>
           <Card label="Ⅰ 건축부문" value={f2(R.sub.arch)} unit={`/ ${R.max.arch}`} formula="Σ a×b" bc="blue"/>
@@ -2562,9 +2640,10 @@ function App(){
               <td style={{border:BD,padding:"4px 8px"}}>{m.txt}</td>
               <td className="f6-mono" style={{border:BD,padding:"4px 8px",textAlign:"center"}}>{m.req}</td>
               <td className="f6-mono" style={{border:BD,padding:"4px 8px",textAlign:"center"}}>{typeof m.cur==="number"?f1(m.cur):m.cur}</td>
-              <td style={{border:BD,padding:"4px 8px",textAlign:"center",fontWeight:800,color:m.ok?"#15803d":"#b91c1c"}}>{m.ok?"충족":"미충족"}</td>
+              <td style={{border:BD,padding:"4px 8px",textAlign:"center",fontWeight:800,color:m.ok?"#15803d":"#b91c1c"}}>{m.ex?"제외":(m.ok?"충족":"미충족")}</td>
             </tr>)}</tbody>
           </table></div>}
+        <div style={{fontSize:11,color:"#6b7280",marginTop:8,lineHeight:1.7}}>※ 주5: 주택1·2는 건축 7번 의무 제외 · 주8: 고효율제품(신재생 KS인증제품)이 없는 품목·용량의 냉난방설비 또는 입주자 공사분은 기계 1·2번 의무(제15조③2호) 미적용 가능 · 제6조5호 단서: 법14조의2 건축 7번은 제로에너지건축물 인증 또는 제21조② 1차에너지소요량 적합 시 예외 가능 · 기숙사·오피스텔은 비주거 기본배점(제23조④) — 해당 여부는 허가권자 확인</div>
       </Box>
 
       {/* 부문별 입력 */}
@@ -2617,8 +2696,8 @@ function App(){
                     {SECS.map(([s,nm,rn])=><tr key={s}><td style={{border:BD,padding:"4px 8px",background:SEC_BG[s],fontWeight:700,color:SEC_COLOR[s]}}>{rn}. {nm}</td><td className="f6-mono" style={{border:BD,padding:"4px 8px",textAlign:"right",fontWeight:700}}>{f2(R.sub[s])}</td><td className="f6-mono" style={{border:BD,padding:"4px 8px",textAlign:"center",color:"#6b7280",fontSize:10}}>/ {R.max[s]}</td></tr>)}
                     <tr><td style={{border:BD,padding:"6px 8px",background:"#1e293b",color:"white",fontWeight:800}}>평점 합계</td><td className="f6-mono" style={{border:BD,padding:"6px 8px",textAlign:"right",fontWeight:900,fontSize:14,color:R.total>=R.target?"#15803d":"#b91c1c"}}>{f2(R.total)}</td><td className="f6-mono" style={{border:BD,padding:"6px 8px",textAlign:"center",fontSize:10}}>목표 {R.target}</td></tr>
                   </tbody></table>
-                  <div style={{marginTop:8,padding:"8px 10px",borderRadius:6,textAlign:"center",fontWeight:900,fontSize:13,background:R.pass?"#dcfce7":"#fee2e2",color:R.pass?"#15803d":"#b91c1c"}}>
-                    판정: {R.pass?"적합":"부적합"} <span style={{fontSize:10,fontWeight:600}}>(합계 {R.total>=R.target?"충족":"미달"} · 의무사항 {R.mandOK?"전 항목 충족":`${R.M.filter(m=>!m.ok).length}건 미충족`})</span>
+                  <div style={{marginTop:8,padding:"8px 10px",borderRadius:6,textAlign:"center",fontWeight:900,fontSize:13,background:R.pass?"#dcfce7":(R.judge==="ok"?"#fee2e2":"#f1f5f9"),color:R.pass?"#15803d":(R.judge==="ok"?"#b91c1c":"#475569")}}>
+                    판정: {R.vtxt} <span style={{fontSize:10,fontWeight:600}}>(합계 {R.total>=R.target?"충족":"미달"} · 의무사항 {R.mandOK?"전 항목 충족":`${R.M.filter(m=>!m.ok).length}건 미충족`})</span>
                   </div>
                 </div>
               </div>
@@ -2662,7 +2741,7 @@ function App(){
                     <td style={{border:BD,padding:"4px 8px",fontSize:10.5}}>{m.txt}</td>
                     <td className="f6-mono" style={{border:BD,padding:"4px 8px",textAlign:"center"}}>{m.req}</td>
                     <td className="f6-mono" style={{border:BD,padding:"4px 8px",textAlign:"center"}}>{typeof m.cur==="number"?f1(m.cur):m.cur}</td>
-                    <td style={{border:BD,padding:"4px 8px",textAlign:"center",fontWeight:800,color:m.ok?"#15803d":"#b91c1c"}}>{m.ok?"충족":"미충족"}</td>
+                    <td style={{border:BD,padding:"4px 8px",textAlign:"center",fontWeight:800,color:m.ok?"#15803d":"#b91c1c"}}>{m.ex?"제외":(m.ok?"충족":"미충족")}</td>
                   </tr>)}</tbody>
                 </table>}
                 <div style={{fontSize:9.5,color:"#6b7280",marginTop:8,lineHeight:1.7}}>
