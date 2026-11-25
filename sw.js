@@ -1,4 +1,5 @@
 /* ═══════════════════════════════════════════════════
+   v6.1.6 (2026-11-25) — 헤더 고정 — 공통 원본 MM-HEADER v1.1 주입(태블릿 · 데스크톱만 — 폭 768px · 높이 600px 이상, 휴대폰은 고정 없음 · 머리+탭 sticky · 내리면 제목 한 줄+탭으로 접힘 · 다른 sticky 패널 top 보정) — 계산 · 인쇄 불변 · MIN 「추천안대로 승인」 · 「추천안대로 진행해줘」(모바일 제외) · 캐시명 v6.1.6 (종전 v6.1.5)
    v6.1.5 (2026-11-24) — 건축 2차 교차검증 반영(A-09): 약식 판정에 의무 연동 · 법 제14조의2 리모델링 기계1·2 0.9 · 공공 74점 신축·별동증축만 · 건축 행위 · BEMS 제외(합리화규정 제6조② 단서) 칸 · 연면적 무효/500㎡ 미만 판정 보류 · 약식 A4 고시 표기 제2026-360호 · 공사명·작성자 기본값 비움 · 캐시명 v6.1.5 (종전 v6.1.4)
    v6.1.4 (2026-11-12) — html2canvas 1.4.1 머리 태그 SRI(integrity sha384 · crossorigin)(정밀검토 B8 · html2canvas SRI) — 화면 · 계산 · 인쇄 불변 · 작업지시서 §25-6-87 · 캐시명 v6.1.4 (종전 v6.1.3)
    v6.1.3 (2026-11-12) — React 18.2.0 → 18.3.1 · Babel 7.23.5 → 7.29.7 · cdnjs 로 통일 · SRI(integrity) · Pretendard CSS SRI(정밀검토 C2) — 화면 · 계산 · 인쇄 불변 · 작업지시서 §25-6-82 · 캐시명 v6.1.3 (종전 v6.1.2)
@@ -25,7 +26,7 @@ const mmMatch = (req, opt) => caches.keys()
   .then((ks) => ks.reduce((p, k) => p.then((r) => r || caches.open(k).then((c) => c.match(req, opt))), Promise.resolve(undefined)))
   .then((r) => (r && r.type === 'opaque' && req && req.mode === 'cors') ? undefined : r);
 
-const CACHE  = 'epi-v6.1.5';   /* v5.4.9 (2026-10-31) — 설치 안내 iPad 판별 · 설치 화면 금색 · manifest 화면 미리보기 · 마스크 아이콘 */   /* v5.4.4 (2026-10-10) — 이용안내 창 문구 정정(index.html 변경 한 쌍) · v5.4.3 매뉴얼 링크 */
+const CACHE  = 'epi-v6.1.6';   /* v5.4.9 (2026-10-31) — 설치 안내 iPad 판별 · 설치 화면 금색 · manifest 화면 미리보기 · 마스크 아이콘 */   /* v5.4.4 (2026-10-10) — 이용안내 창 문구 정정(index.html 변경 한 쌍) · v5.4.3 매뉴얼 링크 */
 const ORPHAN = ['epi-v3-0'];
 const ASSETS = [
   './', './index.html', './manifest.json',
